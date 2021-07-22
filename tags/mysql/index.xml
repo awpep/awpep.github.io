@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Mysql on 不会C的菜菜</title><link>https://awpep.github.io/tags/mysql/</link><description>Recent content in Mysql on 不会C的菜菜</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Tue, 05 May 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://awpep.github.io/tags/mysql/index.xml" rel="self" type="application/rss+xml"/><item><title>关于Qt中出现QSqlDatabase: QMYSQL driver not loaded的解决方案</title><link>https://awpep.github.io/p/about-qmysql-error-solution/</link><pubDate>Tue, 05 May 2020 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/about-qmysql-error-solution/</guid><description>搬运自我的CSDN博客
+t连接Mysql的时候出现了驱动没有装载的情况，在网上找了很多方法，最终成功使得available drivers当中出现了QMYSQL，但是依然无法加载驱动，折腾了半天终于跟着官方文档解决了问题。想起以前也这么折腾过一次，吸取教训，赶紧记录一下以防日后又忘记。
+背景 Qt版本：Qt 5.13.0 编译器：mingw73_64 MySQL：MySQL Connector C 6.1.11，这里没有安装完整的MySQL，因为仅仅需要连接服务器上的数据库
+踩坑过程 根据网上大部分人的方法，使用Qt的图形化界面对sqldriver目录下mysql.pro进行编译，我的目录是
+F:\Softwares\Qt\5.13.0\Src\qtbase\src\plugins\sqldrivers\mysql 然后把编译生成的两个dll文件，copy至编译器的sqldrivers目录下，我的目录是
+F:\Softwares\Qt\5.13.0\mingw73_64\plugins\sqldrivers 最后再把MySQL的libmysql.dll复制到编译器的bin目录下，我的目录是
+F:\Softwares\Qt\5.13.0\mingw73_64\bin 然而，编译完成后，结果如下
+可以说，非常的难受
+解决方法 最后在Qt官网找到了解决方案，根据官网的说明，实际上仅需下载MySQL Connector C，另外官网也给了说明
+Note: As of MySQL 8.0.19, the C Connector is no longer offered as a standalone installable component. Instead, you can get mysql.h and libmysql.* by installing the full MySQL Server (x64 only) or the MariaDB C Connector.
+从8.0.19版本开始不再提供独立的Connector C了
+这里要确定64位的connector要对应64位的Qt，我选择的是64位Archive版(免安装)，确认有以下三个文件
+&amp;lt;MySQL dir&amp;gt;/lib/libmysql.lib &amp;lt;MySQL dir&amp;gt;/lib/libmysql.dll &amp;lt;MySQL dir&amp;gt;/include/mysql.</description></item></channel></rss>

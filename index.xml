@@ -1,2 +1,126 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>不会C的菜菜</title><link>https://awpep.github.io/</link><description>Recent content on 不会C的菜菜</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 21 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://awpep.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Chinese Test</title><link>https://awpep.github.io/p/test-chinese/</link><pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/test-chinese/</guid><description>&lt;img src="https://awpep.github.io/p/test-chinese/helena-hertz-wWZzXlDpMog-unsplash.jpg" alt="Featured image of post Chinese Test" />&lt;h2 id="正文测试">正文测试&lt;/h2>
-&lt;p>阿巴阿巴阿巴&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>不会C的菜菜</title><link>https://awpep.github.io/</link><description>Recent content on 不会C的菜菜</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 21 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://awpep.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>中文测试</title><link>https://awpep.github.io/p/test-chinese/</link><pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/test-chinese/</guid><description>&lt;img src="https://awpep.github.io/p/test-chinese/helena-hertz-wWZzXlDpMog-unsplash.jpg" alt="Featured image of post 中文测试" />&lt;h2 id="正文测试">正文测试&lt;/h2>
+&lt;p>阿巴阿巴阿巴&lt;/p></description></item><item><title>关于Qt中出现QSqlDatabase: QMYSQL driver not loaded的解决方案</title><link>https://awpep.github.io/p/about-qmysql-error-solution/</link><pubDate>Tue, 05 May 2020 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/about-qmysql-error-solution/</guid><description>&lt;img src="https://awpep.github.io/p/about-qmysql-error-solution/Qt.png" alt="Featured image of post 关于Qt中出现QSqlDatabase: QMYSQL driver not loaded的解决方案" />&lt;p>搬运自我的&lt;a class="link" href="https://blog.csdn.net/qq_43626382/article/details/105928356" target="_blank" rel="noopener"
+>CSDN博客&lt;/a>&lt;/p>
+&lt;p>t连接Mysql的时候出现了驱动没有装载的情况，在网上找了很多方法，最终成功使得available drivers当中出现了QMYSQL，但是依然无法加载驱动，折腾了半天终于跟着官方文档解决了问题。想起以前也这么折腾过一次，吸取教训，赶紧记录一下以防日后又忘记。&lt;/p>
+&lt;h3 id="背景">背景&lt;/h3>
+&lt;p>Qt版本：&lt;strong>Qt 5.13.0&lt;/strong>
+编译器：&lt;strong>mingw73_64&lt;/strong>
+MySQL：&lt;strong>MySQL Connector C 6.1.11&lt;/strong>，这里没有安装完整的MySQL，因为仅仅需要连接服务器上的数据库&lt;/p>
+&lt;h3 id="踩坑过程">踩坑过程&lt;/h3>
+&lt;p>根据网上大部分人的方法，使用Qt的图形化界面对sqldriver目录下mysql.pro进行编译，我的目录是&lt;/p>
+&lt;pre>&lt;code>F:\Softwares\Qt\5.13.0\Src\qtbase\src\plugins\sqldrivers\mysql
+&lt;/code>&lt;/pre>&lt;p>然后把编译生成的两个dll文件，copy至编译器的sqldrivers目录下，我的目录是&lt;/p>
+&lt;pre>&lt;code>F:\Softwares\Qt\5.13.0\mingw73_64\plugins\sqldrivers
+&lt;/code>&lt;/pre>&lt;p>最后再把MySQL的&lt;strong>libmysql.dll&lt;/strong>复制到编译器的bin目录下，我的目录是&lt;/p>
+&lt;pre>&lt;code>F:\Softwares\Qt\5.13.0\mingw73_64\bin
+&lt;/code>&lt;/pre>&lt;p>然而，编译完成后，结果如下&lt;/p>
+&lt;p>&lt;img src="https://img-blog.csdnimg.cn/20200505103916319.png" alt="在这里插入图片描述" />&lt;/p>
+&lt;p>可以说，非常的难受&lt;/p>
+&lt;h3 id="解决方法">解决方法&lt;/h3>
+&lt;p>最后在&lt;a class="link" href="https://doc.qt.io/qt-5/sql-driver.html#qmysql-for-mysql-5-and-higher" target="_blank" rel="noopener"
+>Qt官网&lt;/a>找到了解决方案，根据官网的说明，实际上仅需下载&lt;a class="link" href="https://downloads.mysql.com/archives/c-c/" target="_blank" rel="noopener"
+>MySQL Connector C&lt;/a>，另外官网也给了说明&lt;/p>
+&lt;blockquote>
+&lt;p>Note: As of MySQL 8.0.19, the C Connector is no longer offered as a standalone installable component. Instead, you can get mysql.h and libmysql.* by installing the full MySQL Server (x64 only) or the MariaDB C Connector.&lt;/p>
+&lt;/blockquote>
+&lt;p>从8.0.19版本开始不再提供独立的Connector C了&lt;/p>
+&lt;p>这里要确定64位的connector要对应64位的Qt，我选择的是64位Archive版(免安装)，确认有以下三个文件&lt;/p>
+&lt;pre>&lt;code>&amp;lt;MySQL dir&amp;gt;/lib/libmysql.lib
+&amp;lt;MySQL dir&amp;gt;/lib/libmysql.dll
+&amp;lt;MySQL dir&amp;gt;/include/mysql.h
+&lt;/code>&lt;/pre>&lt;p>随后，打开Qt的命令行工具&lt;strong>Qt 5.13.0 (MinGW 7.3.0 64-bit)&lt;/strong>，输入以下指令&lt;/p>
+&lt;pre>&lt;code>cd %QTDIR%\qtbase\src\plugins\sqldrivers
+qmake -- MYSQL_INCDIR=&amp;quot;C:/Program Files/MySQL/MySQL Connector C 6.1/include&amp;quot; MYSQL_LIBDIR=&amp;quot;C:/Program Files/MySQL/MySQL Connector C 6.1/lib&amp;quot;
+mingw32-make sub-mysql
+mingw32-make install
+&lt;/code>&lt;/pre>&lt;p>需要将&lt;strong>MYSQL_INCDIR&lt;/strong>和&lt;strong>MYSQL_LIBDIR&lt;/strong>后的路径替换成自己的，例如我的地址是&lt;/p>
+&lt;pre>&lt;code>MYSQL_INCDIR=&amp;quot;F:\Tools\mysql connector c 6.1.11\include&amp;quot;
+MYSQL_LIBDIR=&amp;quot;F:\Tools\mysql connector c 6.1.11\lib&amp;quot;
+&lt;/code>&lt;/pre>&lt;p>运行完以后会在以下目录生成两个dll文件&lt;strong>qsqlmysql.dll&lt;/strong>、&lt;strong>qsqlmysqld.dll&lt;/strong>（以我为例）&lt;/p>
+&lt;pre>&lt;code>F:\Softwares\Qt\5.13.0\mingw73_64\plugins\sqldrivers
+&lt;/code>&lt;/pre>&lt;p>最后，再将&lt;strong>libmysql.dll&lt;/strong>复制到以下目录即可（以我为例）&lt;/p>
+&lt;pre>&lt;code>F:\Softwares\Qt\5.13.0\mingw73_64\bin
+&lt;/code>&lt;/pre></description></item><item><title>关于STM32F429中定时器的触发问题</title><link>https://awpep.github.io/p/about-stm32f429-timer/</link><pubDate>Fri, 20 Dec 2019 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/about-stm32f429-timer/</guid><description>&lt;img src="https://awpep.github.io/p/about-stm32f429-timer/STM32.png" alt="Featured image of post 关于STM32F429中定时器的触发问题" />&lt;p>搬运自我的&lt;a class="link" href="https://blog.csdn.net/qq_43626382/article/details/103636001" target="_blank" rel="noopener"
+>CSDN博客&lt;/a>&lt;/p>
+&lt;p>帮老师做项目的时候遇到了一个奇怪的问题
+因为需要几个定时器同步，因此将其中一个定时器配置成主模式，将使能信号作为触发源输出，其他定时器作为从模式触发
+但是高级定时器总是莫名其妙被先行被触发，排查后发现，原因来自&lt;strong>TimeBaseInit&lt;/strong>函数，函数原型如下&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cm">/**
+&lt;/span>&lt;span class="cm"> * @brief Initializes the TIMx Time Base Unit peripheral according to
+&lt;/span>&lt;span class="cm"> * the specified parameters in the TIM_TimeBaseInitStruct.
+&lt;/span>&lt;span class="cm"> * @param TIMx: where x can be 1 to 14 to select the TIM peripheral.
+&lt;/span>&lt;span class="cm"> * @param TIM_TimeBaseInitStruct: pointer to a TIM_TimeBaseInitTypeDef structure
+&lt;/span>&lt;span class="cm"> * that contains the configuration information for the specified TIM peripheral.
+&lt;/span>&lt;span class="cm"> * @retval None
+&lt;/span>&lt;span class="cm"> */&lt;/span>
+&lt;span class="kt">void&lt;/span> &lt;span class="nf">TIM_TimeBaseInit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">TIM_TypeDef&lt;/span>&lt;span class="o">*&lt;/span> &lt;span class="n">TIMx&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">TIM_TimeBaseInitTypeDef&lt;/span>&lt;span class="o">*&lt;/span> &lt;span class="n">TIM_TimeBaseInitStruct&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">{&lt;/span>
+&lt;span class="kt">uint16_t&lt;/span> &lt;span class="n">tmpcr1&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="cm">/* Check the parameters */&lt;/span>
+&lt;span class="n">assert_param&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">IS_TIM_ALL_PERIPH&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">TIMx&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;span class="n">assert_param&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">IS_TIM_COUNTER_MODE&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">TIM_TimeBaseInitStruct&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">TIM_CounterMode&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;span class="n">assert_param&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">IS_TIM_CKD_DIV&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">TIM_TimeBaseInitStruct&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">TIM_ClockDivision&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;span class="n">tmpcr1&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">TIMx&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">CR1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">if&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">TIMx&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">TIM1&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">||&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">TIMx&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">TIM8&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">||&lt;/span>
+&lt;span class="p">(&lt;/span>&lt;span class="n">TIMx&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">TIM2&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">||&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">TIMx&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">TIM3&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">||&lt;/span>
+&lt;span class="p">(&lt;/span>&lt;span class="n">TIMx&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">TIM4&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">||&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">TIMx&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">TIM5&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;span class="p">{&lt;/span>
+&lt;span class="cm">/* Select the Counter Mode */&lt;/span>
+&lt;span class="n">tmpcr1&lt;/span> &lt;span class="o">&amp;amp;=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">uint16_t&lt;/span>&lt;span class="p">)(&lt;/span>&lt;span class="o">~&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">TIM_CR1_DIR&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="n">TIM_CR1_CMS&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;span class="n">tmpcr1&lt;/span> &lt;span class="o">|=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">uint32_t&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">TIM_TimeBaseInitStruct&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">TIM_CounterMode&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">if&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">TIMx&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="n">TIM6&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">TIMx&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="n">TIM7&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;span class="p">{&lt;/span>
+&lt;span class="cm">/* Set the clock division */&lt;/span>
+&lt;span class="n">tmpcr1&lt;/span> &lt;span class="o">&amp;amp;=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">uint16_t&lt;/span>&lt;span class="p">)(&lt;/span>&lt;span class="o">~&lt;/span>&lt;span class="n">TIM_CR1_CKD&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="n">tmpcr1&lt;/span> &lt;span class="o">|=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">uint32_t&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">TIM_TimeBaseInitStruct&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">TIM_ClockDivision&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="n">TIMx&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">CR1&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">tmpcr1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="cm">/* Set the Autoreload value */&lt;/span>
+&lt;span class="n">TIMx&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">ARR&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">TIM_TimeBaseInitStruct&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">TIM_Period&lt;/span> &lt;span class="p">;&lt;/span>
+&lt;span class="cm">/* Set the Prescaler value */&lt;/span>
+&lt;span class="n">TIMx&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">PSC&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">TIM_TimeBaseInitStruct&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">TIM_Prescaler&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">((&lt;/span>&lt;span class="n">TIMx&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">TIM1&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">||&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">TIMx&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">TIM8&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;span class="p">{&lt;/span>
+&lt;span class="cm">/* Set the Repetition Counter value */&lt;/span>
+&lt;span class="n">TIMx&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">RCR&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">TIM_TimeBaseInitStruct&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">TIM_RepetitionCounter&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="cm">/* Generate an update event to reload the Prescaler
+&lt;/span>&lt;span class="cm"> and the repetition counter(only for TIM1 and TIM8) value immediately */&lt;/span>
+&lt;span class="n">TIMx&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">EGR&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">TIM_PSCReloadMode_Immediate&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>可以看到里面有这么一句&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cm">/* Generate an update event to reload the Prescaler
+&lt;/span>&lt;span class="cm"> and the repetition counter(only for TIM1 and TIM8) value immediately */&lt;/span>
+&lt;span class="n">TIMx&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">EGR&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">TIM_PSCReloadMode_Immediate&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>注释上写的大概意思是通过产生一个更新事件来立即重载预分频寄存器和重复计数寄存器&lt;!-- raw HTML omitted -->
+查参考手册找TIM8的EGR寄存器&lt;/p>
+&lt;p>&lt;img src="https://img-blog.csdnimg.cn/20191220181454750.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNjI2Mzgy,size_16,color_FFFFFF,t_70" alt="来自RM0090 Rev 18" />&lt;/p>
+&lt;p>继续查右值，发现是个宏&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#define TIM_PSCReloadMode_Immediate ((uint16_t)0x0001)
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>UG位的作用&lt;/p>
+&lt;p>&lt;img src="https://img-blog.csdnimg.cn/20191220172017231.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNjI2Mzgy,size_16,color_FFFFFF,t_70" alt="UG位" />&lt;/p>
+&lt;p>作用注释已经解释了，官方的参考手册里面也有讲，是使用更新事件来确保各个装在入影子寄存器的值立即更新，这是一种官方推荐的初始化定时器的方式&lt;!-- raw HTML omitted -->
+我的代码里，是先初始化高级定时器，然后初始化通用定时器，高级定时器使用通用定时器作为触发源&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="c1">//设置为从模式，用TIM4触发
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="n">TIM_SelectSlaveMode&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">TIM8&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">TIM_SlaveMode_Trigger&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="n">TIM_SelectInputTrigger&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">TIM8&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">TIM_TS_ITR2&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>然而，当代码运行到通用定时器初始化时，发现TIM8神奇的被触发了，通过之前的分析感觉是UG的问题
+可是，我TIM4输出的触发信号明明是使能信号&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="c1">//主模式
+&lt;/span>&lt;span class="c1">//该函数是用作主定时器与从定时器触发的同步，并不是设置主定时器
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="n">TIM_SelectMasterSlaveMode&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">TIM4&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">TIM_MasterSlaveMode_Enable&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="n">TIM_SelectOutputTrigger&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">TIM4&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">TIM_TRGOSource_Enable&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>后来一想，运行到&lt;strong>TimeBaseInit&lt;/strong>时，我还没设置输出的触发源，会不会是这个问题&lt;!-- raw HTML omitted -->
+再查数据手册，管理触发源的是CR2寄存器的MMS&lt;/p>
+&lt;p>&lt;img src="https://img-blog.csdnimg.cn/20191220184317107.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNjI2Mzgy,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" />&lt;/p>
+&lt;p>可以看到，复位值是000，那么MMS是000的时候会怎么样呢？&lt;/p>
+&lt;p>&lt;img src="https://img-blog.csdnimg.cn/20191220184454402.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNjI2Mzgy,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" />&lt;/p>
+&lt;blockquote>
+&lt;p>the UG bit from the TIMx_EGR register is used as trigger output (TRGO). If the reset is generated by the trigger input (slave mode controller configured in reset mode) then the signal on TRGO is delayed compared to the actual reset.&lt;!-- raw HTML omitted -->
+TIMx_EGR寄存器中的UG位用作触发输出（TRGO）。 如果复位是由触发输入（从机模式控制器配置为复位模式）产生的，则TRGO上的信号与实际复位相比会延迟。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;/blockquote>
+&lt;p>至此，终于破案了&lt;!-- raw HTML omitted -->
+截图均来自STM32F429参考手册 RM0090 Rev 18&lt;/p>
+&lt;!-- raw HTML omitted --></description></item></channel></rss>
