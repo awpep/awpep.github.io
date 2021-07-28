@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>C++ on 不会C的菜菜</title><link>https://awpep.github.io/categories/c++/</link><description>Recent content in C++ on 不会C的菜菜</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 28 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://awpep.github.io/categories/c++/index.xml" rel="self" type="application/rss+xml"/><item><title>算法题常用常用小技巧</title><link>https://awpep.github.io/p/acm-tips/</link><pubDate>Wed, 28 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/acm-tips/</guid><description>常用位运算公式 lowbit：取最后一位1 -x&amp;amp;x
+去除最后一位1 (x-1)&amp;amp;x
+枚举子集
+for(int subset = set; subset; subset = (subset-1)&amp;amp;set) GCC内建位运算函数 int __builtin_ffs(unsigned int x) 返回x中最后一个为1的位是从后向前的第几位，如__builtin_ffs(0x789)=1，__builtin_ffs(0x78c)=3。于是，__builtin_ffs(x) - 1就是x中最后一个为1的位的位置。
+int __builtin_popcount(unsigned int x) x中1的个数。
+int __builtin_ctz(unsigned int x) x末尾0的个数。x=0时结果未定义。
+int __builtin_clz(unsigned int x) x前导0的个数。x=0时结果未定义。
+int __builtin_parity(unsigned int x) x中1的奇偶性。
+上面的宏中x都是unsigned int型的，如果传入signed或者是char型，会被强制转换成unsigned int。</description></item></channel></rss>
