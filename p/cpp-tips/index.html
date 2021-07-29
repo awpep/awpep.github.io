@@ -1,0 +1,124 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="C++语法中角度刁钻的部分"><title>C++语法笔记</title><link rel=canonical href=https://awpep.github.io/p/cpp-tips/><link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="C++语法笔记"><meta property="og:description" content="C++语法中角度刁钻的部分"><meta property="og:url" content="https://awpep.github.io/p/cpp-tips/"><meta property="og:site_name" content="不会C的菜菜"><meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="语法"><meta property="article:published_time" content="2021-07-28T00:00:00+00:00"><meta property="article:modified_time" content="2021-07-28T00:00:00+00:00"><meta name=twitter:title content="C++语法笔记"><meta name=twitter:description content="C++语法中角度刁钻的部分"></head><body class="article-page has-toc"><script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script><div class="container main-container flex
+extended"><div id=article-toolbar><a href=https://awpep.github.io/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg><span>返回</span></a></div><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/c++/ style=background-color:#2980b9;color:#fff>C++</a></header><h2 class=article-title><a href=/p/cpp-tips/>C++语法笔记</a></h2><h3 class=article-subtitle>C++语法中角度刁钻的部分</h3><footer class=article-time><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg><time class=article-time--published>Jul 28, 2021</time></footer></div></header><section class=article-content><h2 id=关于template>关于template</h2><h3 id=萃取机制>萃取机制</h3><h4 id=内嵌型别>内嵌型别</h4><p>个人理解，所谓<em>内嵌型别</em>就是在类的内部使用<code>typedef</code>给类型定义别名，常常与模板相结合<br>举个栗子</p><div class=highlight><pre class=chroma><code class=language-cpp data-lang=cpp><span class=k>class</span> <span class=nc>MyClass</span><span class=p>{</span>
+    <span class=k>typedef</span> <span class=kt>int</span> <span class=n>SubType</span><span class=p>;</span>
+    <span class=p>...</span>
+<span class=p>}</span>
+</code></pre></div><p>这段代码中<code>MyClass</code>这个类在内部给<code>int</code>取了一个别名叫<code>SubType</code>，于是乎，我可以用<code>MyClass::SubType</code>来指代<code>int</code><br>这个操作乍一看有点脱裤子放屁的感觉，事实上其功用远超想象</p><h4 id=typename关键字>typename关键字</h4><p><em>C++的一般规则是，除了使用typename修饰之外，template内的任何标识符号都被视为一个值而不是一个类别(对象)</em></p><p>假设我希望实现一个模板类，在其内部需要声明一个类型<code>T</code>的内嵌型<code>SubType</code>的指针，于是有了这么一段看似可行代码</p><div class=highlight><pre class=chroma><code class=language-cpp data-lang=cpp><span class=k>template</span> <span class=o>&lt;</span><span class=k>class</span> <span class=nc>T</span><span class=o>&gt;</span>
+<span class=k>class</span> <span class=nc>MyClass</span><span class=p>{</span>
+    <span class=n>T</span><span class=o>::</span><span class=n>SubType</span> <span class=o>*</span><span class=n>ptr</span>
+<span class=p>};</span>
+</code></pre></div><p>事实上，在编译器看来，<code>SubType</code>会被当成一个<code>static</code>成员，于是<code>T::SubType *ptr</code>会被解释为型别<code>T</code>内的数值<code>SubType</code>与<code>ptr</code>的乘积<br>正确的写法如下</p><div class=highlight><pre class=chroma><code class=language-cpp data-lang=cpp><span class=k>template</span> <span class=o>&lt;</span><span class=k>class</span> <span class=nc>T</span><span class=o>&gt;</span>
+<span class=k>class</span> <span class=nc>MyClass</span><span class=p>{</span>
+    <span class=k>typename</span> <span class=n>T</span><span class=o>::</span><span class=n>SubType</span> <span class=o>*</span><span class=n>ptr</span><span class=p>;</span>
+    <span class=p>...</span>
+<span class=p>};</span>
+</code></pre></div><p><code>typename</code>指出<code>SubType</code>是<code>class T</code>中定义的一个类别，因此<code>ptr</code>是一个指向<code>T::SubType</code>型别的指针。</p><h4 id=迭代器与萃取>迭代器与萃取</h4><p>迭代器有一个重要的功能，就是实现类似取地址内容的操作，这个操作迭代器在声明时通过重载<code>*</code>实现<br>现在假设需要实现这么一个函数，参数是一个迭代器，返回值是迭代器指向的内容，一种直观的想法如下</p><div class=highlight><pre class=chroma><code class=language-cpp data-lang=cpp><span class=k>template</span> <span class=o>&lt;</span><span class=k>class</span> <span class=nc>T</span><span class=o>&gt;</span>
+<span class=k>struct</span> <span class=nc>MyIter</span> <span class=p>{</span>
+    <span class=k>typedef</span> <span class=n>T</span> <span class=n>value_type</span><span class=p>;</span> <span class=c1>// 内嵌型别声明
+</span><span class=c1></span>    <span class=n>T</span><span class=o>*</span> <span class=n>ptr</span><span class=p>;</span>
+    <span class=n>MyIter</span><span class=p>(</span><span class=n>T</span><span class=o>*</span> <span class=n>p</span> <span class=o>=</span> <span class=mi>0</span><span class=p>)</span> <span class=o>:</span> <span class=n>ptr</span><span class=p>(</span><span class=n>p</span><span class=p>)</span> <span class=p>{}</span>
+    <span class=n>T</span><span class=o>&amp;</span> <span class=k>operator</span><span class=o>*</span><span class=p>()</span> <span class=k>const</span> <span class=p>{</span> <span class=k>return</span> <span class=o>*</span><span class=n>ptr</span><span class=p>;</span> <span class=p>}</span>
+<span class=p>};</span>
+
+<span class=k>template</span> <span class=o>&lt;</span><span class=k>class</span> <span class=nc>I</span><span class=o>&gt;</span>
+<span class=p>(</span><span class=o>*</span><span class=n>I</span><span class=p>)</span> <span class=n>func</span><span class=p>(</span><span class=n>I</span> <span class=n>t</span><span class=p>){</span>
+    <span class=p>...</span>
+<span class=p>}</span>
+</code></pre></div><p>但是，这种写法是不行的，问题颇多<br>首先<code>(*T)</code>会被理解为一种操作而非类型声明，就好像<code>*MyIter</code>，对一个类，而非对象取址，不伦不类<br>那，如果加上<code>typname</code>呢？<br>很遗憾，也不可以，<code>typename</code>只对<code>T</code>内部的标识符号起作用</p><p>这时就需要利用内嵌型别声明</p><div class=highlight><pre class=chroma><code class=language-cpp data-lang=cpp><span class=k>template</span> <span class=o>&lt;</span><span class=k>class</span> <span class=nc>T</span><span class=o>&gt;</span>
+<span class=k>struct</span> <span class=nc>MyIter</span> <span class=p>{</span>
+    <span class=k>typedef</span> <span class=n>T</span> <span class=n>value_type</span><span class=p>;</span> <span class=c1>// 内嵌型别声明
+</span><span class=c1></span>    <span class=n>T</span><span class=o>*</span> <span class=n>ptr</span><span class=p>;</span>
+    <span class=n>MyIter</span><span class=p>(</span><span class=n>T</span><span class=o>*</span> <span class=n>p</span> <span class=o>=</span> <span class=mi>0</span><span class=p>)</span> <span class=o>:</span> <span class=n>ptr</span><span class=p>(</span><span class=n>p</span><span class=p>)</span> <span class=p>{}</span>
+    <span class=n>T</span><span class=o>&amp;</span> <span class=k>operator</span><span class=o>*</span><span class=p>()</span> <span class=k>const</span> <span class=p>{</span> <span class=k>return</span> <span class=o>*</span><span class=n>ptr</span><span class=p>;</span> <span class=p>}</span>
+<span class=p>};</span>
+
+<span class=k>template</span> <span class=o>&lt;</span><span class=k>class</span> <span class=nc>I</span><span class=o>&gt;</span>
+<span class=k>typename</span> <span class=n>I</span><span class=o>::</span><span class=n>value_type</span>
+<span class=n>func</span><span class=p>(</span><span class=n>I</span> <span class=n>ite</span><span class=p>)</span> <span class=p>{</span>
+    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;class version&#34;</span> <span class=o>&lt;&lt;</span> <span class=n>std</span><span class=o>::</span><span class=n>endl</span><span class=p>;</span>
+    <span class=k>return</span> <span class=o>*</span><span class=n>ite</span><span class=p>;</span>
+<span class=p>}</span>
+<span class=kt>int</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+    <span class=c1>// ...
+</span><span class=c1></span>    <span class=n>MyIter</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;</span> <span class=n>ite</span><span class=p>(</span><span class=k>new</span> <span class=kt>int</span><span class=p>(</span><span class=mi>8</span><span class=p>));</span>
+    <span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=n>func</span><span class=p>(</span><span class=n>ite</span><span class=p>);</span>    <span class=c1>// 输出8
+</span><span class=c1></span><span class=p>}</span>
+</code></pre></div><p>看似很ok，但是如果传入的是一个原生指针，例如<code>int*</code>，那么编译就无法通过<br>可以用偏特化解决</p><div class=highlight><pre class=chroma><code class=language-cpp data-lang=cpp><span class=k>template</span> <span class=o>&lt;</span><span class=k>class</span> <span class=nc>T</span><span class=o>&gt;</span>
+<span class=k>struct</span> <span class=nc>MyIter</span> <span class=p>{</span>
+    <span class=k>typedef</span> <span class=n>T</span> <span class=n>value_type</span><span class=p>;</span> <span class=c1>// 内嵌型别声明
+</span><span class=c1></span>    <span class=n>T</span><span class=o>*</span> <span class=n>ptr</span><span class=p>;</span>
+    <span class=n>MyIter</span><span class=p>(</span><span class=n>T</span><span class=o>*</span> <span class=n>p</span> <span class=o>=</span> <span class=mi>0</span><span class=p>)</span> <span class=o>:</span> <span class=n>ptr</span><span class=p>(</span><span class=n>p</span><span class=p>)</span> <span class=p>{}</span>
+    <span class=n>T</span><span class=o>&amp;</span> <span class=k>operator</span><span class=o>*</span><span class=p>()</span> <span class=k>const</span> <span class=p>{</span> <span class=k>return</span> <span class=o>*</span><span class=n>ptr</span><span class=p>;</span> <span class=p>}</span>
+<span class=p>};</span>
+
+<span class=k>template</span> <span class=o>&lt;</span><span class=k>class</span> <span class=nc>I</span><span class=o>&gt;</span>
+<span class=k>typename</span> <span class=n>I</span><span class=o>::</span><span class=n>value_type</span>
+<span class=n>func</span><span class=p>(</span><span class=n>I</span> <span class=n>ite</span><span class=p>)</span> <span class=p>{</span>
+    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;class version&#34;</span> <span class=o>&lt;&lt;</span> <span class=n>std</span><span class=o>::</span><span class=n>endl</span><span class=p>;</span>
+    <span class=k>return</span> <span class=o>*</span><span class=n>ite</span><span class=p>;</span>
+<span class=p>}</span>
+<span class=k>template</span> <span class=o>&lt;</span><span class=k>class</span> <span class=nc>I</span><span class=o>&gt;</span>
+<span class=n>I</span>
+<span class=n>func</span><span class=p>(</span><span class=n>I</span><span class=o>*</span> <span class=n>ite</span><span class=p>)</span> <span class=p>{</span>
+    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;pointer version&#34;</span> <span class=o>&lt;&lt;</span> <span class=n>std</span><span class=o>::</span><span class=n>endl</span><span class=p>;</span>
+    <span class=k>return</span> <span class=o>*</span><span class=n>ite</span><span class=p>;</span>
+<span class=p>}</span>
+<span class=k>template</span> <span class=o>&lt;</span><span class=k>class</span> <span class=nc>I</span><span class=o>&gt;</span>
+<span class=n>I</span> <span class=n>func</span><span class=p>(</span><span class=k>const</span> <span class=n>I</span><span class=o>*</span> <span class=n>ite</span><span class=p>)</span> <span class=p>{</span>
+    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;const pointer version&#34;</span> <span class=o>&lt;&lt;</span> <span class=n>std</span><span class=o>::</span><span class=n>endl</span><span class=p>;</span>
+    <span class=k>return</span> <span class=o>*</span><span class=n>ite</span><span class=p>;</span>
+<span class=p>}</span>
+<span class=kt>int</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+    <span class=c1>// ...
+</span><span class=c1></span>    <span class=n>MyIter</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;</span> <span class=n>ite</span><span class=p>(</span><span class=k>new</span> <span class=kt>int</span><span class=p>(</span><span class=mi>8</span><span class=p>));</span>
+    <span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=n>func</span><span class=p>(</span><span class=n>ite</span><span class=p>)</span><span class=o>&lt;&lt;</span><span class=n>endl</span><span class=p>;</span>
+    <span class=kt>int</span> <span class=o>*</span><span class=n>p</span> <span class=o>=</span> <span class=k>new</span> <span class=kt>int</span><span class=p>(</span><span class=mi>52</span><span class=p>);</span>
+    <span class=n>cout</span><span class=o>&lt;&lt;</span><span class=n>func</span><span class=p>(</span><span class=n>p</span><span class=p>)</span><span class=o>&lt;&lt;</span><span class=n>endl</span><span class=p>;</span>
+    <span class=k>const</span> <span class=kt>int</span> <span class=n>k</span> <span class=o>=</span> <span class=mi>3</span><span class=p>;</span>
+    <span class=n>cout</span><span class=o>&lt;&lt;</span><span class=n>func</span><span class=p>(</span><span class=o>&amp;</span><span class=n>k</span><span class=p>)</span><span class=o>&lt;&lt;</span><span class=n>endl</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></div><p>但是，如此这般需要对每一个函数都进行偏特化，会造成大量的代码冗余，为了提高代码重用，STL加入了一个中间层，也就是iterator_Traits</p><div class=highlight><pre class=chroma><code class=language-cpp data-lang=cpp><span class=k>template</span> <span class=o>&lt;</span><span class=k>class</span> <span class=nc>T</span><span class=o>&gt;</span>
+<span class=k>struct</span> <span class=nc>MyIter</span> <span class=p>{</span>
+    <span class=k>typedef</span> <span class=n>T</span> <span class=n>value_type</span><span class=p>;</span> <span class=c1>// 内嵌型别声明
+</span><span class=c1></span>    <span class=n>T</span><span class=o>*</span> <span class=n>ptr</span><span class=p>;</span>
+    <span class=n>MyIter</span><span class=p>(</span><span class=n>T</span><span class=o>*</span> <span class=n>p</span> <span class=o>=</span> <span class=mi>0</span><span class=p>)</span> <span class=o>:</span> <span class=n>ptr</span><span class=p>(</span><span class=n>p</span><span class=p>)</span> <span class=p>{}</span>
+    <span class=n>T</span><span class=o>&amp;</span> <span class=k>operator</span><span class=o>*</span><span class=p>()</span> <span class=k>const</span> <span class=p>{</span> <span class=k>return</span> <span class=o>*</span><span class=n>ptr</span><span class=p>;</span> <span class=p>}</span>
+<span class=p>};</span>
+<span class=c1>// class type
+</span><span class=c1></span><span class=k>template</span> <span class=o>&lt;</span><span class=k>class</span> <span class=nc>T</span><span class=o>&gt;</span>
+<span class=k>struct</span> <span class=nc>iterator_traits</span> <span class=p>{</span>
+    <span class=k>typedef</span> <span class=k>typename</span> <span class=n>T</span><span class=o>::</span><span class=n>value_type</span> <span class=n>value_type</span><span class=p>;</span>
+<span class=p>};</span>
+<span class=c1>// 偏特化1
+</span><span class=c1></span><span class=k>template</span> <span class=o>&lt;</span><span class=k>class</span> <span class=nc>T</span><span class=o>&gt;</span>
+<span class=k>struct</span> <span class=nc>iterator_traits</span><span class=o>&lt;</span><span class=n>T</span><span class=o>*&gt;</span> <span class=p>{</span>
+    <span class=k>typedef</span> <span class=n>T</span> <span class=n>value_type</span><span class=p>;</span>
+<span class=p>};</span>
+<span class=c1>// 偏特化2
+</span><span class=c1></span><span class=k>template</span> <span class=o>&lt;</span><span class=k>class</span> <span class=nc>T</span><span class=o>&gt;</span>
+<span class=k>struct</span> <span class=nc>iterator_traits</span><span class=o>&lt;</span><span class=k>const</span> <span class=n>T</span><span class=o>*&gt;</span> <span class=p>{</span>
+    <span class=k>typedef</span> <span class=n>T</span> <span class=n>value_type</span><span class=p>;</span>
+<span class=p>};</span>
+
+<span class=k>template</span> <span class=o>&lt;</span><span class=k>class</span> <span class=nc>I</span><span class=o>&gt;</span>
+<span class=k>typename</span> <span class=n>iterator_traits</span><span class=o>&lt;</span><span class=n>I</span><span class=o>&gt;::</span><span class=n>value_type</span>
+<span class=c1>// 首先询问iterator_traits&lt;I&gt;::value_type,如果传递的I为指针,则进入特化版本,iterator_traits直接回答;如果传递进来的I为class type,就去询问T::value_type.
+</span><span class=c1></span><span class=n>func</span><span class=p>(</span><span class=n>I</span> <span class=n>ite</span><span class=p>)</span> <span class=p>{</span>
+    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;normal version&#34;</span> <span class=o>&lt;&lt;</span> <span class=n>std</span><span class=o>::</span><span class=n>endl</span><span class=p>;</span>
+    <span class=k>return</span> <span class=o>*</span><span class=n>ite</span><span class=p>;</span>
+<span class=p>}</span>
+<span class=kt>int</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+    <span class=c1>// ...
+</span><span class=c1></span>    <span class=n>MyIter</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;</span> <span class=n>ite</span><span class=p>(</span><span class=k>new</span> <span class=kt>int</span><span class=p>(</span><span class=mi>8</span><span class=p>));</span>
+    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=n>func</span><span class=p>(</span><span class=n>ite</span><span class=p>)</span><span class=o>&lt;&lt;</span><span class=n>std</span><span class=o>::</span><span class=n>endl</span><span class=p>;</span>
+    <span class=kt>int</span> <span class=o>*</span><span class=n>p</span> <span class=o>=</span> <span class=k>new</span> <span class=kt>int</span><span class=p>(</span><span class=mi>52</span><span class=p>);</span>
+    <span class=n>std</span><span class=o>::</span><span class=n>cout</span><span class=o>&lt;&lt;</span><span class=n>func</span><span class=p>(</span><span class=n>p</span><span class=p>)</span><span class=o>&lt;&lt;</span><span class=n>std</span><span class=o>::</span><span class=n>endl</span><span class=p>;</span>
+    <span class=k>const</span> <span class=kt>int</span> <span class=n>k</span> <span class=o>=</span> <span class=mi>3</span><span class=p>;</span>
+    <span class=n>std</span><span class=o>::</span><span class=n>cout</span><span class=o>&lt;&lt;</span><span class=n>func</span><span class=p>(</span><span class=o>&amp;</span><span class=n>k</span><span class=p>)</span><span class=o>&lt;&lt;</span><span class=n>std</span><span class=o>::</span><span class=n>endl</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></div><p>萃取机制为模板使用中的类型声明问题提供了一种通用的实现方式，避免了使用<code>value_types</code>的函数都需要进行偏特化设计的尴尬</p><h2 id=关于左值和右值todo>关于左值和右值(TODO)</h2></section><footer class=article-footer><section class=article-tags><a href=/tags/%E8%AF%AD%E6%B3%95/>语法</a></section><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg><span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-contents--wrapper><h2 class=section-title>相关文章</h2><div class=related-contents><div class="flex article-list--tile"><article><a href=/p/acm-tips/><div class=article-details><h2 class=article-title>算法题常用小技巧</h2></div></a></article></div></div></aside><footer class=site-footer><section class=copyright>&copy;
+2021 不会C的菜菜</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=2.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#关于template>关于template</a><ol><li><a href=#萃取机制>萃取机制</a><ol><li><a href=#内嵌型别>内嵌型别</a></li><li><a href=#typename关键字>typename关键字</a></li><li><a href=#迭代器与萃取>迭代器与萃取</a></li></ol></li></ol></li><li><a href=#关于左值和右值todo>关于左值和右值(TODO)</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script></body></html>
