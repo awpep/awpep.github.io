@@ -136,7 +136,14 @@
 &lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">cout&lt;/span>&lt;span class="o">&amp;lt;&amp;lt;&lt;/span>&lt;span class="n">func&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">k&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">&amp;lt;&amp;lt;&lt;/span>&lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">endl&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;span class="p">}&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>萃取机制为模板使用中的类型声明问题提供了一种通用的实现方式，避免了使用&lt;code>value_types&lt;/code>的函数都需要进行偏特化设计的尴尬&lt;/p>
-&lt;h2 id="关于左值和右值todo">关于左值和右值(TODO)&lt;/h2></description></item><item><title>算法题常用小技巧</title><link>https://awpep.github.io/p/acm-tips/</link><pubDate>Wed, 28 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/acm-tips/</guid><description>&lt;h2 id="常用位运算公式">常用位运算公式&lt;/h2>
+&lt;h2 id="关于左值和右值todo">关于左值和右值(TODO)&lt;/h2>
+&lt;h2 id="参考">参考&lt;/h2>
+&lt;ol>
+&lt;li>&lt;a class="link" href="https://www.cnblogs.com/cthon/p/9201649.html" target="_blank" rel="noopener"
+>C++模板之typename和class关键字的区别&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://zhuanlan.zhihu.com/p/85809752" target="_blank" rel="noopener"
+>C++ STL 源码剖析之 Traits 编程技法&lt;/a>&lt;/li>
+&lt;/ol></description></item><item><title>算法题常用小技巧</title><link>https://awpep.github.io/p/acm-tips/</link><pubDate>Wed, 28 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/acm-tips/</guid><description>&lt;h2 id="常用位运算公式">常用位运算公式&lt;/h2>
 &lt;p>lowbit：取最后一位1 &lt;code>-x&amp;amp;x&lt;/code>&lt;br>
 去除最后一位1 &lt;code>(x-1)&amp;amp;x&lt;/code>&lt;br>
 枚举子集&lt;/p>
