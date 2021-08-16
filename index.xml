@@ -1,4 +1,32 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>不会C的菜菜</title><link>https://awpep.github.io/</link><description>Recent content on 不会C的菜菜</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 28 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://awpep.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>C++语法笔记</title><link>https://awpep.github.io/p/cpp-tips/</link><pubDate>Wed, 28 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/cpp-tips/</guid><description>&lt;h2 id="关于template">关于template&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>不会C的菜菜</title><link>https://awpep.github.io/</link><description>Recent content on 不会C的菜菜</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 28 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://awpep.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>C++语法笔记</title><link>https://awpep.github.io/p/cpp-tips/</link><pubDate>Wed, 28 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/cpp-tips/</guid><description>&lt;h2 id="关于cv关键字">关于cv关键字&lt;/h2>
+&lt;p>本节搬运自&lt;a class="link" href="https://blog.csdn.net/jamesmf/article/details/4653926" target="_blank" rel="noopener"
+>const关键字放在“类型前”与“类型后”&lt;/a>&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">char&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="k">const&lt;/span> &lt;span class="n">cp&lt;/span> &lt;span class="c1">//定义一个指向字符的指针常数
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="kt">char&lt;/span>&lt;span class="o">*&lt;/span> &lt;span class="n">p&lt;/span> &lt;span class="c1">//定义一个指向字符常数的指针
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">char&lt;/span> &lt;span class="k">const&lt;/span>&lt;span class="o">*&lt;/span> &lt;span class="n">p&lt;/span> &lt;span class="c1">//等同于const char* p
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="关于求值顺序">关于求值顺序&lt;/h2>
+&lt;p>本节搬运自&lt;a class="link" href="https://www.cnblogs.com/jiayouwyhit/p/3147310.html" target="_blank" rel="noopener"
+>【部分原创】标准C语言的优先级、结合性、求值顺序、未定义行为和非确定行为浅析&lt;/a>&lt;/p>
+&lt;p>在C语言中，仅有少数运算符在标准中有规定表达式求值的顺序&lt;/p>
+&lt;h3 id="逻辑与或">逻辑与或&lt;/h3>
+&lt;p>&lt;code>&amp;amp;&amp;amp;&lt;/code>和&lt;code>||&lt;/code>规定从左到右求值，并且在能确定整个表达式的值的时候就会停止，也就是 常说的短路&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">int&lt;/span> &lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">y&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">z&lt;/span>&lt;span class="o">=&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="o">++&lt;/span>&lt;span class="n">x&lt;/span> &lt;span class="o">||&lt;/span> &lt;span class="o">++&lt;/span>&lt;span class="n">y&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="o">++&lt;/span>&lt;span class="n">z&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="c1">//结果：x == 2, y == 1, z == 1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="条件表达式">条件表达式&lt;/h3>
+&lt;p>条件表达式的求值顺序是这样规定的：&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="n">test&lt;/span> &lt;span class="o">?&lt;/span> &lt;span class="n">exp1&lt;/span> &lt;span class="err">：&lt;/span> &lt;span class="n">exp2&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>条件测试部分&lt;code>test&lt;/code>非零，表达式&lt;code>exp1&lt;/code>被求值，否则表达式&lt;code>exp2&lt;/code>被求值，并且保证&lt;code>exp1&lt;/code>和&lt;code>exp2&lt;/code>两者之中只有一个被求值&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">int&lt;/span> &lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">y&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">z&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="o">++&lt;/span>&lt;span class="n">x&lt;/span> &lt;span class="o">||&lt;/span> &lt;span class="o">++&lt;/span>&lt;span class="n">y&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="o">++&lt;/span>&lt;span class="n">z&lt;/span> &lt;span class="o">?&lt;/span> &lt;span class="o">++&lt;/span>&lt;span class="nl">y&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="o">++&lt;/span>&lt;span class="n">z&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="c1">//结果：x == 1, y == 1, z == 0;
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="逗号运算符">逗号运算符&lt;/h3>
+&lt;p>逗号运算符的求值顺序是从左到右顺序求值，并且整个表达式的值等于最后一个表达式的值，注意逗号&lt;code>,&lt;/code>还可以作为函数参数的分隔符，变量定义的分隔符等，这时候表达式的求值顺序是没有规定的！&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">int&lt;/span> &lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">y&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">if&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">y&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="n">cout&lt;/span> &lt;span class="o">&amp;lt;&amp;lt;&lt;/span> &lt;span class="s">&amp;#34;1st&amp;#34;&lt;/span> &lt;span class="o">&amp;lt;&amp;lt;&lt;/span> &lt;span class="n">endl&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">else&lt;/span> &lt;span class="n">cout&lt;/span> &lt;span class="o">&amp;lt;&amp;lt;&lt;/span> &lt;span class="s">&amp;#34;2nd&amp;#34;&lt;/span> &lt;span class="o">&amp;lt;&amp;lt;&lt;/span> &lt;span class="n">endl&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="c1">//结果：2nd
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="关于template">关于template&lt;/h2>
 &lt;h3 id="萃取机制">萃取机制&lt;/h3>
 &lt;h4 id="内嵌型别">内嵌型别&lt;/h4>
 &lt;p>个人理解，所谓&lt;em>内嵌型别&lt;/em>就是在类的内部使用&lt;code>typedef&lt;/code>给类型定义别名，常常与模板相结合&lt;br>
@@ -139,6 +167,10 @@
 &lt;h2 id="关于左值和右值todo">关于左值和右值(TODO)&lt;/h2>
 &lt;h2 id="参考">参考&lt;/h2>
 &lt;ol>
+&lt;li>&lt;a class="link" href="https://blog.csdn.net/jamesmf/article/details/4653926" target="_blank" rel="noopener"
+>const关键字放在“类型前”与“类型后”&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://www.cnblogs.com/jiayouwyhit/p/3147310.html" target="_blank" rel="noopener"
+>【部分原创】标准C语言的优先级、结合性、求值顺序、未定义行为和非确定行为浅析&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://www.cnblogs.com/cthon/p/9201649.html" target="_blank" rel="noopener"
 >C++模板之typename和class关键字的区别&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://zhuanlan.zhihu.com/p/85809752" target="_blank" rel="noopener"
