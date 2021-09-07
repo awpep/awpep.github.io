@@ -6,4 +6,7 @@ int __builtin_popcount(unsigned int x) x中1的个数。
 int __builtin_ctz(unsigned int x) x末尾0的个数。x=0时结果未定义。
 int __builtin_clz(unsigned int x) x前导0的个数。x=0时结果未定义。
 int __builtin_parity(unsigned int x) x中1的奇偶性。
-上面的宏中x都是unsigned int型的，如果传入signed或者是char型，会被强制转换成unsigned int。</description></item></channel></rss>
+上面的宏中x都是unsigned int型的，如果传入signed或者是char型，会被强制转换成unsigned int。
+质因数分解 来源：力扣（LeetCode）
+作者：xin-xiang-yuan-fang
+// 质因数分解 vector&amp;lt;int&amp;gt; vec; int k = c; for (int i = 2; i &amp;lt;= c / i; i++) { bool flag = false; while (c % i == 0) c /= i, flag = true; if(flag) vec.</description></item></channel></rss>

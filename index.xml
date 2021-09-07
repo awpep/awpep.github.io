@@ -1,4 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>不会C的菜菜</title><link>https://awpep.github.io/</link><description>Recent content on 不会C的菜菜</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 28 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://awpep.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>C++语法笔记</title><link>https://awpep.github.io/p/cpp-tips/</link><pubDate>Wed, 28 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/cpp-tips/</guid><description>&lt;h2 id="关于cv关键字">关于cv关键字&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>不会C的菜菜</title><link>https://awpep.github.io/</link><description>Recent content on 不会C的菜菜</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 26 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://awpep.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Effective C++阅读笔记</title><link>https://awpep.github.io/p/effective-cpp-tips/</link><pubDate>Thu, 26 Aug 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/effective-cpp-tips/</guid><description>&lt;h2 id="视c为一个语言联邦">视C++为一个语言联邦&lt;/h2>
+&lt;p>将C++看作四个次级结构组成的语法体系，每个体系都会有独自的守则&lt;/p>
+&lt;ol>
+&lt;li>C&lt;/li>
+&lt;li>Object-Oriented C++&lt;/li>
+&lt;li>Template C++&lt;/li>
+&lt;li>STL&lt;/li>
+&lt;/ol>
+&lt;h2 id="尽量以constenuminline替换define">尽量以&lt;code>const&lt;/code>，&lt;code>enum&lt;/code>，&lt;code>inline&lt;/code>替换&lt;code>#define&lt;/code>&lt;/h2>
+&lt;h3 id="例1">例1&lt;/h3>
+&lt;p>例如以下两行代码&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="cp">#define ASPECT_RATIO 1.653
+&lt;/span>&lt;span class="cp">&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">AspectRatio&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mf">1.653&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>前者在编译器处理时，仅仅进行简单的替换，而后者为实实在在的变量，
+如果在代码中出错，前者在错误信息中会被识别为&lt;code>1.653&lt;/code>，而后者会被识别为&lt;code>AspectRatio&lt;/code>
+显然带有语义的变量能够帮助我们更快地定位问题所在&lt;/p></description></item><item><title>C++语法笔记</title><link>https://awpep.github.io/p/cpp-tips/</link><pubDate>Wed, 28 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/cpp-tips/</guid><description>&lt;h2 id="关于cv关键字">关于cv关键字&lt;/h2>
 &lt;p>本节搬运自&lt;a class="link" href="https://blog.csdn.net/jamesmf/article/details/4653926" target="_blank" rel="noopener"
 >const关键字放在“类型前”与“类型后”&lt;/a>&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">char&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="k">const&lt;/span> &lt;span class="n">cp&lt;/span> &lt;span class="c1">//定义一个指向字符的指针常数
@@ -191,7 +206,34 @@
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>x&lt;/code>前导0的个数。&lt;code>x=0&lt;/code>时结果未定义。&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">int&lt;/span> &lt;span class="n">__builtin_parity&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>x&lt;/code>中1的奇偶性。&lt;/p>
-&lt;p>上面的宏中&lt;code>x&lt;/code>都是&lt;code>unsigned int&lt;/code>型的，如果传入&lt;code>signed&lt;/code>或者是&lt;code>char&lt;/code>型，会被强制转换成&lt;code>unsigned int&lt;/code>。&lt;/p></description></item><item><title>中文测试</title><link>https://awpep.github.io/p/test-chinese/</link><pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/test-chinese/</guid><description>&lt;img src="https://awpep.github.io/p/test-chinese/helena-hertz-wWZzXlDpMog-unsplash.jpg" alt="Featured image of post 中文测试" />&lt;h2 id="正文测试">正文测试&lt;/h2>
+&lt;p>上面的宏中&lt;code>x&lt;/code>都是&lt;code>unsigned int&lt;/code>型的，如果传入&lt;code>signed&lt;/code>或者是&lt;code>char&lt;/code>型，会被强制转换成&lt;code>unsigned int&lt;/code>。&lt;/p>
+&lt;h2 id="质因数分解">质因数分解&lt;/h2>
+&lt;p>来源：&lt;a class="link" href="https://leetcode-cn.com/problems/gcd-sort-of-an-array/solution/bing-cha-ji-fen-jie-zhi-yin-shu-by-xin-x-ylsz/" target="_blank" rel="noopener"
+>力扣（LeetCode）&lt;/a>&lt;br>
+作者：xin-xiang-yuan-fang&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="c1">// 质因数分解
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="n">vector&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">vec&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="n">k&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">c&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="n">c&lt;/span> &lt;span class="o">/&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="kt">bool&lt;/span> &lt;span class="n">flag&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">while&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">c&lt;/span> &lt;span class="o">%&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">c&lt;/span> &lt;span class="o">/=&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">flag&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">if&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">flag&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="n">vec&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">push_back&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">c&lt;/span> &lt;span class="o">&amp;gt;&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="n">vec&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">push_back&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="分析">分析:&lt;/h3>
+&lt;h4 id="关于界限i--ci">关于界限&lt;code>i &amp;lt;= c/i&lt;/code>&lt;/h4>
+&lt;p>众所周知，除法的运算时间远大于乘法
+但这里写成&lt;code>i &amp;lt;= c/i&lt;/code> 而不是 &lt;code>i*i &amp;lt;= c&lt;/code>是为了防止&lt;code>i*i&lt;/code>溢出
+作为界限，这两个式子在不溢出时是等价的&lt;/p>
+&lt;p>那，为什么不是&lt;code>i &amp;lt;= c&lt;/code>呢？&lt;br>
+经过之前的运算，剩余的&lt;code>c&lt;/code>当中已经不包含小于&lt;code>i&lt;/code>的因数，
+如果&lt;code>1 &amp;lt; c &amp;lt; i*i&lt;/code>那么&lt;code>c&lt;/code>一定是质数&lt;/p>
+&lt;h4 id="为什么获得的因数一定是质数">为什么获得的因数一定是质数&lt;/h4>
+&lt;p>如果&lt;code>i&lt;/code>是合数，那么一定能分解成&lt;code>i==a*b&lt;/code>的形式，
+其中至少&lt;code>a&lt;/code>为质数，且&lt;code>a&lt;/code>和&lt;code>b&lt;/code>都小于&lt;code>i&lt;/code>，
+如之前所言，剩余的&lt;code>c&lt;/code>当中一定不包含小于&lt;code>i&lt;/code>的因数，
+因此，如果&lt;code>i&lt;/code>是&lt;code>c&lt;/code>的因数，那么&lt;code>i&lt;/code>一定是质数&lt;/p></description></item><item><title>中文测试</title><link>https://awpep.github.io/p/test-chinese/</link><pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/test-chinese/</guid><description>&lt;img src="https://awpep.github.io/p/test-chinese/helena-hertz-wWZzXlDpMog-unsplash.jpg" alt="Featured image of post 中文测试" />&lt;h2 id="正文测试">正文测试&lt;/h2>
 &lt;p>阿巴阿巴阿巴&lt;/p></description></item><item><title>关于Qt中出现QSqlDatabase: QMYSQL driver not loaded的解决方案</title><link>https://awpep.github.io/p/about-qmysql-error-solution/</link><pubDate>Tue, 05 May 2020 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/about-qmysql-error-solution/</guid><description>&lt;img src="https://awpep.github.io/p/about-qmysql-error-solution/Qt.png" alt="Featured image of post 关于Qt中出现QSqlDatabase: QMYSQL driver not loaded的解决方案" />&lt;p>搬运自我的&lt;a class="link" href="https://blog.csdn.net/qq_43626382/article/details/105928356" target="_blank" rel="noopener"
 >CSDN博客&lt;/a>&lt;/p>
 &lt;p>t连接Mysql的时候出现了驱动没有装载的情况，在网上找了很多方法，最终成功使得available drivers当中出现了QMYSQL，但是依然无法加载驱动，折腾了半天终于跟着官方文档解决了问题。想起以前也这么折腾过一次，吸取教训，赶紧记录一下以防日后又忘记。&lt;/p>
