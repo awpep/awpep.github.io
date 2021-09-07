@@ -190,50 +190,7 @@
 >C++模板之typename和class关键字的区别&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://zhuanlan.zhihu.com/p/85809752" target="_blank" rel="noopener"
 >C++ STL 源码剖析之 Traits 编程技法&lt;/a>&lt;/li>
-&lt;/ol></description></item><item><title>算法题常用小技巧</title><link>https://awpep.github.io/p/acm-tips/</link><pubDate>Wed, 28 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/acm-tips/</guid><description>&lt;h2 id="常用位运算公式">常用位运算公式&lt;/h2>
-&lt;p>lowbit：取最后一位1 &lt;code>-x&amp;amp;x&lt;/code>&lt;br>
-去除最后一位1 &lt;code>(x-1)&amp;amp;x&lt;/code>&lt;br>
-枚举子集&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="k">for&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">subset&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">set&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">subset&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">subset&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">subset&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">set&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="gcc内建位运算函数">GCC内建位运算函数&lt;/h2>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">int&lt;/span> &lt;span class="n">__builtin_ffs&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>返回&lt;code>x&lt;/code>中最后一个为1的位是从后向前的第几位，如&lt;code>__builtin_ffs(0x789)=1&lt;/code>，&lt;code>__builtin_ffs(0x78c)=3&lt;/code>。于是，&lt;code>__builtin_ffs(x) - 1&lt;/code>就是&lt;code>x&lt;/code>中最后一个为1的位的位置。&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">int&lt;/span> &lt;span class="n">__builtin_popcount&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>x&lt;/code>中1的个数。&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">int&lt;/span> &lt;span class="n">__builtin_ctz&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>x&lt;/code>末尾0的个数。&lt;code>x=0&lt;/code>时结果未定义。&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">int&lt;/span> &lt;span class="n">__builtin_clz&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>x&lt;/code>前导0的个数。&lt;code>x=0&lt;/code>时结果未定义。&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">int&lt;/span> &lt;span class="n">__builtin_parity&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>x&lt;/code>中1的奇偶性。&lt;/p>
-&lt;p>上面的宏中&lt;code>x&lt;/code>都是&lt;code>unsigned int&lt;/code>型的，如果传入&lt;code>signed&lt;/code>或者是&lt;code>char&lt;/code>型，会被强制转换成&lt;code>unsigned int&lt;/code>。&lt;/p>
-&lt;h2 id="质因数分解">质因数分解&lt;/h2>
-&lt;p>来源：&lt;a class="link" href="https://leetcode-cn.com/problems/gcd-sort-of-an-array/solution/bing-cha-ji-fen-jie-zhi-yin-shu-by-xin-x-ylsz/" target="_blank" rel="noopener"
->力扣（LeetCode）&lt;/a>&lt;br>
-作者：xin-xiang-yuan-fang&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="c1">// 质因数分解
-&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="n">vector&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">vec&lt;/span>&lt;span class="p">;&lt;/span>
-&lt;span class="kt">int&lt;/span> &lt;span class="n">k&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">c&lt;/span>&lt;span class="p">;&lt;/span>
-&lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="n">c&lt;/span> &lt;span class="o">/&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;span class="kt">bool&lt;/span> &lt;span class="n">flag&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">false&lt;/span>&lt;span class="p">;&lt;/span>
-&lt;span class="k">while&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">c&lt;/span> &lt;span class="o">%&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;span class="n">c&lt;/span> &lt;span class="o">/=&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">flag&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">true&lt;/span>&lt;span class="p">;&lt;/span>
-&lt;span class="k">if&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">flag&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="n">vec&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">push_back&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">);&lt;/span>
-&lt;span class="p">}&lt;/span>
-&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">c&lt;/span> &lt;span class="o">&amp;gt;&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="n">vec&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">push_back&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">);&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="分析">分析:&lt;/h3>
-&lt;h4 id="关于界限i--ci">关于界限&lt;code>i &amp;lt;= c/i&lt;/code>&lt;/h4>
-&lt;p>众所周知，除法的运算时间远大于乘法
-但这里写成&lt;code>i &amp;lt;= c/i&lt;/code> 而不是 &lt;code>i*i &amp;lt;= c&lt;/code>是为了防止&lt;code>i*i&lt;/code>溢出
-作为界限，这两个式子在不溢出时是等价的&lt;/p>
-&lt;p>那，为什么不是&lt;code>i &amp;lt;= c&lt;/code>呢？&lt;br>
-经过之前的运算，剩余的&lt;code>c&lt;/code>当中已经不包含小于&lt;code>i&lt;/code>的因数，
-如果&lt;code>1 &amp;lt; c &amp;lt; i*i&lt;/code>那么&lt;code>c&lt;/code>一定是质数&lt;/p>
-&lt;h4 id="为什么获得的因数一定是质数">为什么获得的因数一定是质数&lt;/h4>
-&lt;p>如果&lt;code>i&lt;/code>是合数，那么一定能分解成&lt;code>i==a*b&lt;/code>的形式，
-其中至少&lt;code>a&lt;/code>为质数，且&lt;code>a&lt;/code>和&lt;code>b&lt;/code>都小于&lt;code>i&lt;/code>，
-如之前所言，剩余的&lt;code>c&lt;/code>当中一定不包含小于&lt;code>i&lt;/code>的因数，
-因此，如果&lt;code>i&lt;/code>是&lt;code>c&lt;/code>的因数，那么&lt;code>i&lt;/code>一定是质数&lt;/p></description></item><item><title>中文测试</title><link>https://awpep.github.io/p/test-chinese/</link><pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/test-chinese/</guid><description>&lt;img src="https://awpep.github.io/p/test-chinese/helena-hertz-wWZzXlDpMog-unsplash.jpg" alt="Featured image of post 中文测试" />&lt;h2 id="正文测试">正文测试&lt;/h2>
+&lt;/ol></description></item><item><title>中文测试</title><link>https://awpep.github.io/p/test-chinese/</link><pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/test-chinese/</guid><description>&lt;img src="https://awpep.github.io/p/test-chinese/helena-hertz-wWZzXlDpMog-unsplash.jpg" alt="Featured image of post 中文测试" />&lt;h2 id="正文测试">正文测试&lt;/h2>
 &lt;p>阿巴阿巴阿巴&lt;/p></description></item><item><title>关于Qt中出现QSqlDatabase: QMYSQL driver not loaded的解决方案</title><link>https://awpep.github.io/p/about-qmysql-error-solution/</link><pubDate>Tue, 05 May 2020 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/about-qmysql-error-solution/</guid><description>&lt;img src="https://awpep.github.io/p/about-qmysql-error-solution/Qt.png" alt="Featured image of post 关于Qt中出现QSqlDatabase: QMYSQL driver not loaded的解决方案" />&lt;p>搬运自我的&lt;a class="link" href="https://blog.csdn.net/qq_43626382/article/details/105928356" target="_blank" rel="noopener"
 >CSDN博客&lt;/a>&lt;/p>
 &lt;p>t连接Mysql的时候出现了驱动没有装载的情况，在网上找了很多方法，最终成功使得available drivers当中出现了QMYSQL，但是依然无法加载驱动，折腾了半天终于跟着官方文档解决了问题。想起以前也这么折腾过一次，吸取教训，赶紧记录一下以防日后又忘记。&lt;/p>
@@ -358,4 +315,57 @@ TIMx_EGR寄存器中的UG位用作触发输出（TRGO）。 如果复位是由�
 &lt;/blockquote>
 &lt;p>至此，终于破案了&lt;!-- raw HTML omitted -->
 截图均来自STM32F429参考手册 RM0090 Rev 18&lt;/p>
-&lt;!-- raw HTML omitted --></description></item></channel></rss>
+&lt;!-- raw HTML omitted --></description></item><item><title/><link>https://awpep.github.io/p/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/</guid><description>&lt;hr>
+&lt;h2 id="--算法">title: 算法题常用小技巧
+description: 一些可能有用也可能没用的算法小技巧
+date: 2021-07-28
+slug: ACM-tips
+categories:
+- C++
+tags:
+- 算法&lt;/h2>
+&lt;h2 id="常用位运算公式">常用位运算公式&lt;/h2>
+&lt;p>lowbit：取最后一位1 &lt;code>-x&amp;amp;x&lt;/code>&lt;br>
+去除最后一位1 &lt;code>(x-1)&amp;amp;x&lt;/code>&lt;br>
+枚举子集&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="k">for&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">subset&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">set&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">subset&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">subset&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">subset&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">set&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="gcc内建位运算函数">GCC内建位运算函数&lt;/h2>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">int&lt;/span> &lt;span class="n">__builtin_ffs&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>返回&lt;code>x&lt;/code>中最后一个为1的位是从后向前的第几位，如&lt;code>__builtin_ffs(0x789)=1&lt;/code>，&lt;code>__builtin_ffs(0x78c)=3&lt;/code>。于是，&lt;code>__builtin_ffs(x) - 1&lt;/code>就是&lt;code>x&lt;/code>中最后一个为1的位的位置。&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">int&lt;/span> &lt;span class="n">__builtin_popcount&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>x&lt;/code>中1的个数。&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">int&lt;/span> &lt;span class="n">__builtin_ctz&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>x&lt;/code>末尾0的个数。&lt;code>x=0&lt;/code>时结果未定义。&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">int&lt;/span> &lt;span class="n">__builtin_clz&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>x&lt;/code>前导0的个数。&lt;code>x=0&lt;/code>时结果未定义。&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">int&lt;/span> &lt;span class="n">__builtin_parity&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>x&lt;/code>中1的奇偶性。&lt;/p>
+&lt;p>上面的宏中&lt;code>x&lt;/code>都是&lt;code>unsigned int&lt;/code>型的，如果传入&lt;code>signed&lt;/code>或者是&lt;code>char&lt;/code>型，会被强制转换成&lt;code>unsigned int&lt;/code>。&lt;/p>
+&lt;h2 id="质因数分解">质因数分解&lt;/h2>
+&lt;p>参考来源：&lt;a class="link" href="https://leetcode-cn.com/problems/gcd-sort-of-an-array/solution/bing-cha-ji-fen-jie-zhi-yin-shu-by-xin-x-ylsz/" target="_blank" rel="noopener"
+>力扣（LeetCode）&lt;/a>&lt;br>
+作者：xin-xiang-yuan-fang&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="c1">// 质因数分解
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="n">vector&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">vec&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="n">n&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="o">++&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="kt">bool&lt;/span> &lt;span class="n">flag&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">while&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">n&lt;/span> &lt;span class="o">%&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="n">n&lt;/span> &lt;span class="o">/=&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="n">flag&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">if&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">flag&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="n">vec&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">push_back&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">n&lt;/span> &lt;span class="o">&amp;gt;&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="n">vec&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">push_back&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">n&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="分析">分析:&lt;/h3>
+&lt;h4 id="关于界限i--ci">关于界限&lt;code>i &amp;lt;= c/i&lt;/code>&lt;/h4>
+&lt;p>众所周知，除法的运算时间远大于乘法
+但这里写成&lt;code>i &amp;lt;= c/i&lt;/code> 而不是 &lt;code>i*i &amp;lt;= c&lt;/code>是为了防止&lt;code>i*i&lt;/code>溢出
+作为界限，这两个式子在不溢出时是等价的&lt;/p>
+&lt;p>那，为什么不是&lt;code>i &amp;lt;= c&lt;/code>呢？&lt;br>
+经过之前的运算，剩余的&lt;code>c&lt;/code>当中已经不包含小于&lt;code>i&lt;/code>的因数，
+如果&lt;code>1 &amp;lt; c &amp;lt; i*i&lt;/code>那么&lt;code>c&lt;/code>一定是质数&lt;/p>
+&lt;h4 id="为什么获得的因数一定是质数">为什么获得的因数一定是质数&lt;/h4>
+&lt;p>如果&lt;code>i&lt;/code>是合数，那么一定能分解成&lt;code>i==a*b&lt;/code>的形式，
+其中至少&lt;code>a&lt;/code>为质数，且&lt;code>a&lt;/code>和&lt;code>b&lt;/code>都小于&lt;code>i&lt;/code>，
+如之前所言，剩余的&lt;code>c&lt;/code>当中一定不包含小于&lt;code>i&lt;/code>的因数，
+因此，如果&lt;code>i&lt;/code>是&lt;code>c&lt;/code>的因数，那么&lt;code>i&lt;/code>一定是质数&lt;/p></description></item></channel></rss>

@@ -6,15 +6,4 @@ char * const cp //定义一个指向字符的指针常数 const char* p //定义
 逻辑与或 &amp;amp;&amp;amp;和||规定从左到右求值，并且在能确定整个表达式的值的时候就会停止，也就是 常说的短路
 int x = 1, y = 1, z= 1; ++x || ++y &amp;amp;&amp;amp; ++z; //结果：x == 2, y == 1, z == 1 条件表达式 条件表达式的求值顺序是这样规定的：
 test ? exp1 ： exp2; 条件测试部分test非零，表达式exp1被求值，否则表达式exp2被求值，并且保证exp1和exp2两者之中只有一个被求值
-int x = 0, y = 0, z = 0; ++x || ++y &amp;amp;&amp;amp; ++z ? ++y : ++z; //结果：x == 1, y == 1, z == 0; 逗号运算符 逗号运算符的求值顺序是从左到右顺序求值，并且整个表达式的值等于最后一个表达式的值，注意逗号,还可以作为函数参数的分隔符，变量定义的分隔符等，这时候表达式的求值顺序是没有规定的！</description></item><item><title>算法题常用小技巧</title><link>https://awpep.github.io/p/acm-tips/</link><pubDate>Wed, 28 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/acm-tips/</guid><description>常用位运算公式 lowbit：取最后一位1 -x&amp;amp;x
-去除最后一位1 (x-1)&amp;amp;x
-枚举子集
-for(int subset = set; subset; subset = (subset-1)&amp;amp;set) GCC内建位运算函数 int __builtin_ffs(unsigned int x) 返回x中最后一个为1的位是从后向前的第几位，如__builtin_ffs(0x789)=1，__builtin_ffs(0x78c)=3。于是，__builtin_ffs(x) - 1就是x中最后一个为1的位的位置。
-int __builtin_popcount(unsigned int x) x中1的个数。
-int __builtin_ctz(unsigned int x) x末尾0的个数。x=0时结果未定义。
-int __builtin_clz(unsigned int x) x前导0的个数。x=0时结果未定义。
-int __builtin_parity(unsigned int x) x中1的奇偶性。
-上面的宏中x都是unsigned int型的，如果传入signed或者是char型，会被强制转换成unsigned int。
-质因数分解 来源：力扣（LeetCode）
-作者：xin-xiang-yuan-fang
-// 质因数分解 vector&amp;lt;int&amp;gt; vec; int k = c; for (int i = 2; i &amp;lt;= c / i; i++) { bool flag = false; while (c % i == 0) c /= i, flag = true; if(flag) vec.</description></item></channel></rss>
+int x = 0, y = 0, z = 0; ++x || ++y &amp;amp;&amp;amp; ++z ? ++y : ++z; //结果：x == 1, y == 1, z == 0; 逗号运算符 逗号运算符的求值顺序是从左到右顺序求值，并且整个表达式的值等于最后一个表达式的值，注意逗号,还可以作为函数参数的分隔符，变量定义的分隔符等，这时候表达式的求值顺序是没有规定的！</description></item></channel></rss>
