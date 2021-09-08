@@ -6,7 +6,18 @@ char * const cp //定义一个指向字符的指针常数 const char* p //定义
 逻辑与或 &amp;amp;&amp;amp;和||规定从左到右求值，并且在能确定整个表达式的值的时候就会停止，也就是 常说的短路
 int x = 1, y = 1, z= 1; ++x || ++y &amp;amp;&amp;amp; ++z; //结果：x == 2, y == 1, z == 1 条件表达式 条件表达式的求值顺序是这样规定的：
 test ? exp1 ： exp2; 条件测试部分test非零，表达式exp1被求值，否则表达式exp2被求值，并且保证exp1和exp2两者之中只有一个被求值
-int x = 0, y = 0, z = 0; ++x || ++y &amp;amp;&amp;amp; ++z ? ++y : ++z; //结果：x == 1, y == 1, z == 0; 逗号运算符 逗号运算符的求值顺序是从左到右顺序求值，并且整个表达式的值等于最后一个表达式的值，注意逗号,还可以作为函数参数的分隔符，变量定义的分隔符等，这时候表达式的求值顺序是没有规定的！</description></item><item><title>中文测试</title><link>https://awpep.github.io/p/test-chinese/</link><pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/test-chinese/</guid><description>正文测试 阿巴阿巴阿巴</description></item><item><title>关于Qt中出现QSqlDatabase: QMYSQL driver not loaded的解决方案</title><link>https://awpep.github.io/p/about-qmysql-error-solution/</link><pubDate>Tue, 05 May 2020 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/about-qmysql-error-solution/</guid><description>搬运自我的CSDN博客
+int x = 0, y = 0, z = 0; ++x || ++y &amp;amp;&amp;amp; ++z ? ++y : ++z; //结果：x == 1, y == 1, z == 0; 逗号运算符 逗号运算符的求值顺序是从左到右顺序求值，并且整个表达式的值等于最后一个表达式的值，注意逗号,还可以作为函数参数的分隔符，变量定义的分隔符等，这时候表达式的求值顺序是没有规定的！</description></item><item><title>算法题常用小技巧</title><link>https://awpep.github.io/p/acm-tips/</link><pubDate>Wed, 28 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/acm-tips/</guid><description>常用位运算公式 lowbit：取最后一位1 -x&amp;amp;x
+去除最后一位1 (x-1)&amp;amp;x
+枚举子集
+for(int subset = set; subset; subset = (subset-1)&amp;amp;set) GCC内建位运算函数 int __builtin_ffs(unsigned int x) 返回x中最后一个为1的位是从后向前的第几位，如__builtin_ffs(0x789)=1，__builtin_ffs(0x78c)=3。于是，__builtin_ffs(x) - 1就是x中最后一个为1的位的位置。
+int __builtin_popcount(unsigned int x) x中1的个数。
+int __builtin_ctz(unsigned int x) x末尾0的个数。x=0时结果未定义。
+int __builtin_clz(unsigned int x) x前导0的个数。x=0时结果未定义。
+int __builtin_parity(unsigned int x) x中1的奇偶性。
+上面的宏中x都是unsigned int型的，如果传入signed或者是char型，会被强制转换成unsigned int。
+质因数分解 参考来源：力扣（LeetCode）
+作者：xin-xiang-yuan-fang
+源码 // 质因数分解 vector&amp;lt;int&amp;gt; vec; for (int i = 2; i &amp;lt;= n/i; ++i) { bool flag = false; while (n % i == 0) { n /= i; flag = true; } if(flag) vec.</description></item><item><title>中文测试</title><link>https://awpep.github.io/p/test-chinese/</link><pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/test-chinese/</guid><description>正文测试 阿巴阿巴阿巴</description></item><item><title>关于Qt中出现QSqlDatabase: QMYSQL driver not loaded的解决方案</title><link>https://awpep.github.io/p/about-qmysql-error-solution/</link><pubDate>Tue, 05 May 2020 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/about-qmysql-error-solution/</guid><description>搬运自我的CSDN博客
 t连接Mysql的时候出现了驱动没有装载的情况，在网上找了很多方法，最终成功使得available drivers当中出现了QMYSQL，但是依然无法加载驱动，折腾了半天终于跟着官方文档解决了问题。想起以前也这么折腾过一次，吸取教训，赶紧记录一下以防日后又忘记。
 背景 Qt版本：Qt 5.13.0 编译器：mingw73_64 MySQL：MySQL Connector C 6.1.11，这里没有安装完整的MySQL，因为仅仅需要连接服务器上的数据库
 踩坑过程 根据网上大部分人的方法，使用Qt的图形化界面对sqldriver目录下mysql.pro进行编译，我的目录是
@@ -20,15 +31,4 @@ Note: As of MySQL 8.0.19, the C Connector is no longer offered as a standalone i
 这里要确定64位的connector要对应64位的Qt，我选择的是64位Archive版(免安装)，确认有以下三个文件
 &amp;lt;MySQL dir&amp;gt;/lib/libmysql.lib &amp;lt;MySQL dir&amp;gt;/lib/libmysql.dll &amp;lt;MySQL dir&amp;gt;/include/mysql.</description></item><item><title>关于STM32F429中定时器的触发问题</title><link>https://awpep.github.io/p/about-stm32f429-timer/</link><pubDate>Fri, 20 Dec 2019 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/about-stm32f429-timer/</guid><description>搬运自我的CSDN博客
 帮老师做项目的时候遇到了一个奇怪的问题 因为需要几个定时器同步，因此将其中一个定时器配置成主模式，将使能信号作为触发源输出，其他定时器作为从模式触发 但是高级定时器总是莫名其妙被先行被触发，排查后发现，原因来自TimeBaseInit函数，函数原型如下
-/** * @brief Initializes the TIMx Time Base Unit peripheral according to * the specified parameters in the TIM_TimeBaseInitStruct. * @param TIMx: where x can be 1 to 14 to select the TIM peripheral. * @param TIM_TimeBaseInitStruct: pointer to a TIM_TimeBaseInitTypeDef structure * that contains the configuration information for the specified TIM peripheral. * @retval None */ void TIM_TimeBaseInit(TIM_TypeDef* TIMx, TIM_TimeBaseInitTypeDef* TIM_TimeBaseInitStruct) { uint16_t tmpcr1 = 0; /* Check the parameters */ assert_param(IS_TIM_ALL_PERIPH(TIMx)); assert_param(IS_TIM_COUNTER_MODE(TIM_TimeBaseInitStruct-&amp;gt;TIM_CounterMode)); assert_param(IS_TIM_CKD_DIV(TIM_TimeBaseInitStruct-&amp;gt;TIM_ClockDivision)); tmpcr1 = TIMx-&amp;gt;CR1; if((TIMx == TIM1) || (TIMx == TIM8)|| (TIMx == TIM2) || (TIMx == TIM3)|| (TIMx == TIM4) || (TIMx == TIM5)) { /* Select the Counter Mode */ tmpcr1 &amp;amp;= (uint16_t)(~(TIM_CR1_DIR | TIM_CR1_CMS)); tmpcr1 |= (uint32_t)TIM_TimeBaseInitStruct-&amp;gt;TIM_CounterMode; } if((TIMx !</description></item><item><title/><link>https://awpep.github.io/p/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/</guid><description>title: 算法题常用小技巧 description: 一些可能有用也可能没用的算法小技巧 date: 2021-07-28 slug: ACM-tips categories: - C++ tags: - 算法 常用位运算公式 lowbit：取最后一位1 -x&amp;amp;x
-去除最后一位1 (x-1)&amp;amp;x
-枚举子集
-for(int subset = set; subset; subset = (subset-1)&amp;amp;set) GCC内建位运算函数 int __builtin_ffs(unsigned int x) 返回x中最后一个为1的位是从后向前的第几位，如__builtin_ffs(0x789)=1，__builtin_ffs(0x78c)=3。于是，__builtin_ffs(x) - 1就是x中最后一个为1的位的位置。
-int __builtin_popcount(unsigned int x) x中1的个数。
-int __builtin_ctz(unsigned int x) x末尾0的个数。x=0时结果未定义。
-int __builtin_clz(unsigned int x) x前导0的个数。x=0时结果未定义。
-int __builtin_parity(unsigned int x) x中1的奇偶性。
-上面的宏中x都是unsigned int型的，如果传入signed或者是char型，会被强制转换成unsigned int。
-质因数分解 参考来源：力扣（LeetCode）
-作者：xin-xiang-yuan-fang
-// 质因数分解 vector&amp;lt;int&amp;gt; vec; for (int i = 2; i &amp;lt;= n/i; ++i) { bool flag = false; while (n % i == 0) { n /= i; flag = true; } if(flag) vec.</description></item></channel></rss>
+/** * @brief Initializes the TIMx Time Base Unit peripheral according to * the specified parameters in the TIM_TimeBaseInitStruct. * @param TIMx: where x can be 1 to 14 to select the TIM peripheral. * @param TIM_TimeBaseInitStruct: pointer to a TIM_TimeBaseInitTypeDef structure * that contains the configuration information for the specified TIM peripheral. * @retval None */ void TIM_TimeBaseInit(TIM_TypeDef* TIMx, TIM_TimeBaseInitTypeDef* TIM_TimeBaseInitStruct) { uint16_t tmpcr1 = 0; /* Check the parameters */ assert_param(IS_TIM_ALL_PERIPH(TIMx)); assert_param(IS_TIM_COUNTER_MODE(TIM_TimeBaseInitStruct-&amp;gt;TIM_CounterMode)); assert_param(IS_TIM_CKD_DIV(TIM_TimeBaseInitStruct-&amp;gt;TIM_ClockDivision)); tmpcr1 = TIMx-&amp;gt;CR1; if((TIMx == TIM1) || (TIMx == TIM8)|| (TIMx == TIM2) || (TIMx == TIM3)|| (TIMx == TIM4) || (TIMx == TIM5)) { /* Select the Counter Mode */ tmpcr1 &amp;amp;= (uint16_t)(~(TIM_CR1_DIR | TIM_CR1_CMS)); tmpcr1 |= (uint32_t)TIM_TimeBaseInitStruct-&amp;gt;TIM_CounterMode; } if((TIMx !</description></item></channel></rss>
