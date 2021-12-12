@@ -13,7 +13,76 @@
 &lt;/span>&lt;span class="cp">&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">AspectRatio&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mf">1.653&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>前者在编译器处理时，仅仅进行简单的替换，而后者为实实在在的变量，
 如果在代码中出错，前者在错误信息中会被识别为&lt;code>1.653&lt;/code>，而后者会被识别为&lt;code>AspectRatio&lt;/code>
-显然带有语义的变量能够帮助我们更快地定位问题所在&lt;/p></description></item><item><title>C++语法笔记</title><link>https://awpep.github.io/p/cpp-tips/</link><pubDate>Wed, 28 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/cpp-tips/</guid><description>&lt;h2 id="关于cv关键字">关于cv关键字&lt;/h2>
+显然带有语义的变量能够帮助我们更快地定位问题所在&lt;/p>
+&lt;h2 id="确定对象被使用前已被初始化">确定对象被使用前已被初始化&lt;/h2>
+&lt;h3 id="用初始化列表代替赋值">用初始化列表代替赋值&lt;/h3>
+&lt;p>这在效率上更有优势，如下例：&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="k">class&lt;/span> &lt;span class="nc">PhoneNumber&lt;/span> &lt;span class="p">{...};&lt;/span>
+&lt;span class="k">class&lt;/span> &lt;span class="nc">ABEntry&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">public&lt;/span>&lt;span class="o">:&lt;/span>
+&lt;span class="n">ABEntry&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">string&lt;/span>&lt;span class="o">&amp;amp;&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="k">const&lt;/span> &lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">string&lt;/span>&lt;span class="o">&amp;amp;&lt;/span> &lt;span class="n">address&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="k">const&lt;/span> &lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">list&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">PhoneNumber&lt;/span>&lt;span class="o">&amp;gt;&amp;amp;&lt;/span> &lt;span class="n">phones&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="k">private&lt;/span>&lt;span class="o">:&lt;/span>
+&lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">string&lt;/span> &lt;span class="n">theName&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">string&lt;/span> &lt;span class="n">theAddress&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">list&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">PhoneNumber&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">thePhones&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="n">numTimesConsulted&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="c1">// 使用赋值的方式进行初始化
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="n">ABEntry&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">ABEntry&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">string&lt;/span>&lt;span class="o">&amp;amp;&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="k">const&lt;/span> &lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">string&lt;/span>&lt;span class="o">&amp;amp;&lt;/span> &lt;span class="n">address&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="k">const&lt;/span> &lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">list&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">PhoneNumber&lt;/span>&lt;span class="o">&amp;gt;&amp;amp;&lt;/span> &lt;span class="n">phones&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">{&lt;/span>
+&lt;span class="n">theName&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="n">theAddress&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">address&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="n">thePhones&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">phones&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="n">numTimesConsulted&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="c1">// 使用初始化列表
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="n">ABEntry&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">ABEntry&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">string&lt;/span>&lt;span class="o">&amp;amp;&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="k">const&lt;/span> &lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">string&lt;/span>&lt;span class="o">&amp;amp;&lt;/span> &lt;span class="n">address&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="k">const&lt;/span> &lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">list&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">PhoneNumber&lt;/span>&lt;span class="o">&amp;gt;&amp;amp;&lt;/span> &lt;span class="n">phones&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="o">:&lt;/span>&lt;span class="n">theName&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;span class="n">theAddress&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">address&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;span class="n">thePhones&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">phones&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;span class="n">numTimesConsulted&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">{}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>使用赋值的方式进行初始化将会先调用成员数据类型的&lt;code>default&lt;/code>构造函数，
+而后进行拷贝赋值，如此一来，&lt;code>default&lt;/code>构造函数相当于做了无用功&lt;/p>
+&lt;h3 id="初始化顺序">初始化顺序&lt;/h3>
+&lt;ol>
+&lt;li>基类早于派生类&lt;/li>
+&lt;li>成员变量按照声明的顺序&lt;/li>
+&lt;/ol>
+&lt;h3 id="local-static与non-local-static对象">&lt;code>local static&lt;/code>与&lt;code>non-local static&lt;/code>对象&lt;/h3>
+&lt;p>&lt;code>static&lt;/code>对象包括&lt;code>global&lt;/code>对象、定义于&lt;code>namespace&lt;/code>作用域内的对象、
+在&lt;code>class&lt;/code>内、函数内、文件作用域内被声明为static的对象&lt;br>
+函数内的&lt;code>static&lt;/code>对象称作&lt;code>local static&lt;/code>对象，其余称为&lt;code>non-local static&lt;/code>对象&lt;br>
+编译单元：产出单一目标文件的源码&lt;/p>
+&lt;p>假设某编译单元内的某个&lt;code>non-local static&lt;/code>对象的初始化动作使用了另一编译单元内的某个&lt;code>non-local static&lt;/code>对象，这将导致它所用到的这个对象可能尚未被初始化&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="c1">// 这是一个文件
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="k">class&lt;/span> &lt;span class="nc">FileSystem&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">public&lt;/span>&lt;span class="o">:&lt;/span>
+&lt;span class="p">...&lt;/span>
+&lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">size_t&lt;/span> &lt;span class="n">numDisks&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="k">const&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">...&lt;/span>
+&lt;span class="p">};&lt;/span>
+&lt;span class="k">extern&lt;/span> &lt;span class="n">FileSystem&lt;/span> &lt;span class="n">tfs&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="c1">// 这是另一个文件
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="k">class&lt;/span> &lt;span class="nc">Directory&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">public&lt;/span>&lt;span class="o">:&lt;/span>
+&lt;span class="n">Directory&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">params&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="p">...&lt;/span>
+&lt;span class="p">};&lt;/span>
+&lt;span class="n">Directory&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">Directory&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">params&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">{&lt;/span>
+&lt;span class="p">...&lt;/span>
+&lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">size_t&lt;/span> &lt;span class="n">disks&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">tfs&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">numDisks&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;span class="p">...&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="n">Directory&lt;/span> &lt;span class="nf">tempDir&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">params&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>C++语法笔记</title><link>https://awpep.github.io/p/cpp-tips/</link><pubDate>Wed, 28 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/cpp-tips/</guid><description>&lt;h2 id="关于cv关键字">关于cv关键字&lt;/h2>
 &lt;p>本节搬运自&lt;a class="link" href="https://blog.csdn.net/jamesmf/article/details/4653926" target="_blank" rel="noopener"
 >const关键字放在“类型前”与“类型后”&lt;/a>&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">char&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="k">const&lt;/span> &lt;span class="n">cp&lt;/span> &lt;span class="c1">//定义一个指向字符的指针常数
@@ -268,7 +337,16 @@
 对于大于&lt;code>p&lt;/code>的质数，不妨以&lt;code>p1&lt;/code>为例，继续走一步，
 &lt;code>i*p1 == p1*p0*a == p0*p1*a&lt;/code>，显然,&lt;code>i*p1&lt;/code>在&lt;code>i&lt;/code>走到&lt;code>i1==p1*a&lt;/code>时,
 一样会被&lt;code>p0&lt;/code>标记，因此，没有必要继续，
-在&lt;code>i%p == 0&lt;/code>时退出，已经能够保证&lt;code>vis&lt;/code>中大于2的元素，都至少被访问一次&lt;/p></description></item><item><title>中文测试</title><link>https://awpep.github.io/p/test-chinese/</link><pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/test-chinese/</guid><description>&lt;img src="https://awpep.github.io/p/test-chinese/helena-hertz-wWZzXlDpMog-unsplash.jpg" alt="Featured image of post 中文测试" />&lt;h2 id="正文测试">正文测试&lt;/h2>
+在&lt;code>i%p == 0&lt;/code>时退出，已经能够保证&lt;code>vis&lt;/code>中大于2的元素，都至少被访问一次&lt;/p>
+&lt;h2 id="最大公因数">最大公因数&lt;/h2>
+&lt;h3 id="源码-2">源码&lt;/h3>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kr">inline&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">gcd&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">a&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">b&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">while&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="o">^=&lt;/span>&lt;span class="n">b&lt;/span>&lt;span class="o">^=&lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="o">^=&lt;/span>&lt;span class="n">b&lt;/span>&lt;span class="o">%=&lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="n">b&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="原理">原理&lt;/h3>
+&lt;p>辗转相除法&lt;/p></description></item><item><title>中文测试</title><link>https://awpep.github.io/p/test-chinese/</link><pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/test-chinese/</guid><description>&lt;img src="https://awpep.github.io/p/test-chinese/helena-hertz-wWZzXlDpMog-unsplash.jpg" alt="Featured image of post 中文测试" />&lt;h2 id="正文测试">正文测试&lt;/h2>
 &lt;p>阿巴阿巴阿巴&lt;/p></description></item><item><title>关于Qt中出现QSqlDatabase: QMYSQL driver not loaded的解决方案</title><link>https://awpep.github.io/p/about-qmysql-error-solution/</link><pubDate>Tue, 05 May 2020 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/about-qmysql-error-solution/</guid><description>&lt;img src="https://awpep.github.io/p/about-qmysql-error-solution/Qt.png" alt="Featured image of post 关于Qt中出现QSqlDatabase: QMYSQL driver not loaded的解决方案" />&lt;p>搬运自我的&lt;a class="link" href="https://blog.csdn.net/qq_43626382/article/details/105928356" target="_blank" rel="noopener"
 >CSDN博客&lt;/a>&lt;/p>
 &lt;p>t连接Mysql的时候出现了驱动没有装载的情况，在网上找了很多方法，最终成功使得available drivers当中出现了QMYSQL，但是依然无法加载驱动，折腾了半天终于跟着官方文档解决了问题。想起以前也这么折腾过一次，吸取教训，赶紧记录一下以防日后又忘记。&lt;/p>
