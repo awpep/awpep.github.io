@@ -82,6 +82,69 @@
 &lt;span class="p">...&lt;/span>
 &lt;span class="p">}&lt;/span>
 &lt;span class="n">Directory&lt;/span> &lt;span class="nf">tempDir&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">params&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="了解c默默编写并调用哪些函数">了解C++默默编写并调用哪些函数&lt;/h2>
+&lt;h3 id="编译器会默认生成以下成员函数">编译器会默认生成以下成员函数&lt;/h3>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="k">class&lt;/span> &lt;span class="nc">Empty&lt;/span> &lt;span class="p">{};&lt;/span>
+&lt;span class="k">class&lt;/span> &lt;span class="nc">Empty&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">public&lt;/span>&lt;span class="o">:&lt;/span>
+&lt;span class="n">Empty&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{...}&lt;/span> &lt;span class="c1">// defualt构造函数
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="n">Empty&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="n">Empty&lt;/span>&lt;span class="o">&amp;amp;&lt;/span> &lt;span class="n">rhs&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{...}&lt;/span> &lt;span class="c1">// copy构造函数
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="o">~&lt;/span>&lt;span class="n">Empty&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{...}&lt;/span> &lt;span class="c1">// 析构函数
+&lt;/span>&lt;span class="c1">&lt;/span>
+&lt;span class="c1">// copy assignment操作符
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="n">Empty&lt;/span>&lt;span class="o">&amp;amp;&lt;/span> &lt;span class="k">operator&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="n">Empty&lt;/span>&lt;span class="o">&amp;amp;&lt;/span> &lt;span class="n">rhs&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{...}&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>以上两种写法是等价的&lt;/p>
+&lt;h3 id="一种不可赋值类的写法">一种不可赋值类的写法&lt;/h3>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="k">class&lt;/span> &lt;span class="nc">Uncopyable&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">protected&lt;/span>&lt;span class="o">:&lt;/span>
+&lt;span class="c1">// 允许构造和析构
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="n">Uncopyable&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{}&lt;/span>
+&lt;span class="o">~&lt;/span>&lt;span class="n">Uncopyable&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{}&lt;/span>
+&lt;span class="k">private&lt;/span>&lt;span class="o">:&lt;/span>
+&lt;span class="c1">// 阻止copying
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="n">Uncopyable&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="n">Uncopyable&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="n">Uncopyable&lt;/span>&lt;span class="o">&amp;amp;&lt;/span> &lt;span class="k">operator&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="n">Uncopyable&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">class&lt;/span> &lt;span class="nc">HomeForSale&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="k">private&lt;/span> &lt;span class="n">Uncopyable&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="p">...&lt;/span>
+&lt;span class="p">};&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>只要&lt;code>HomeforSale&lt;/code>类不主动定义拷贝构造和拷贝赋值函数，
+那么编译器自动生成的默认拷贝构造和拷贝赋值函数将调用基类的这类函数，
+因而，尝试拷贝&lt;code>HomeforSale&lt;/code>的操作会被拒绝&lt;/p>
+&lt;h3 id="如果重写了拷贝赋值函数一定要显式地调用基类的拷贝赋值函数">如果重写了拷贝赋值函数，一定要显式地调用基类的拷贝赋值函数&lt;/h3>
+&lt;p>考虑如下情况&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="c1">// 基类
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="k">class&lt;/span> &lt;span class="nc">Customer&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">public&lt;/span>&lt;span class="o">:&lt;/span>
+&lt;span class="n">Customer&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">string&lt;/span> &lt;span class="n">name&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;lucy&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="n">Customer&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="n">Customer&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="n">Customer&lt;/span>&lt;span class="o">&amp;amp;&lt;/span> &lt;span class="k">operator&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="n">Customer&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">void&lt;/span> &lt;span class="nf">printname&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="k">private&lt;/span>&lt;span class="o">:&lt;/span>
+&lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">string&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">};&lt;/span>
+&lt;span class="c1">// 派生类
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="k">class&lt;/span> &lt;span class="nc">PriorityCustomer&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="k">public&lt;/span> &lt;span class="n">Customer&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">public&lt;/span>&lt;span class="o">:&lt;/span>
+&lt;span class="n">PriorityCustomer&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">string&lt;/span> &lt;span class="n">name&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;lucy&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">priority&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="n">PriorityCustomer&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="n">PriorityCustomer&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="n">PriorityCustomer&lt;/span>&lt;span class="o">&amp;amp;&lt;/span> &lt;span class="k">operator&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="n">PriorityCustomer&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="k">private&lt;/span>&lt;span class="o">:&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="n">priority&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">};&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>如果不主动定义派生类的拷贝赋值函数，那么编译器生成的拷贝赋值函数将自动地调用
+基类的拷贝赋值函数，否则就一定要显式地调用基类的拷贝赋值函数&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="c1">// 拷贝赋值函数
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="n">PriorityCustomer&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>
+&lt;span class="n">PriorityCustomer&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="k">operator&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="n">PriorityCustomer&lt;/span>&lt;span class="o">&amp;amp;&lt;/span> &lt;span class="n">rhs&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">{&lt;/span>
+&lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">cout&lt;/span> &lt;span class="o">&amp;lt;&amp;lt;&lt;/span> &lt;span class="s">&amp;#34;PriorityCustomer copy assignment operator&amp;#34;&lt;/span> &lt;span class="o">&amp;lt;&amp;lt;&lt;/span> &lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">endl&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="c1">// 如果重写了拷贝赋值，一定要显式调用基类的拷贝赋值函数
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="n">Customer&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="k">operator&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">rhs&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="n">priority&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">rhs&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">priority&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div></description></item><item><title>C++语法笔记</title><link>https://awpep.github.io/p/cpp-tips/</link><pubDate>Wed, 28 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/cpp-tips/</guid><description>&lt;h2 id="关于cv关键字">关于cv关键字&lt;/h2>
 &lt;p>本节搬运自&lt;a class="link" href="https://blog.csdn.net/jamesmf/article/details/4653926" target="_blank" rel="noopener"
 >const关键字放在“类型前”与“类型后”&lt;/a>&lt;/p>
