@@ -151,7 +151,45 @@
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">char&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="k">const&lt;/span> &lt;span class="n">cp&lt;/span> &lt;span class="c1">//定义一个指向字符的指针常数
 &lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="kt">char&lt;/span>&lt;span class="o">*&lt;/span> &lt;span class="n">p&lt;/span> &lt;span class="c1">//定义一个指向字符常数的指针
 &lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">char&lt;/span> &lt;span class="k">const&lt;/span>&lt;span class="o">*&lt;/span> &lt;span class="n">p&lt;/span> &lt;span class="c1">//等同于const char* p
-&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="关于求值顺序">关于求值顺序&lt;/h2>
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="关于const-unordered_map的特殊之处">关于&lt;code>const unordered_map&lt;/code>的特殊之处&lt;/h2>
+&lt;p>&lt;code>const unordered_map&lt;/code>不能使用&lt;code>[]&lt;/code>重载&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp"> &lt;span class="c1">//@{
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="cm">/**
+&lt;/span>&lt;span class="cm"> * @brief Subscript ( @c [] ) access to %unordered_map data.
+&lt;/span>&lt;span class="cm"> * @param __k The key for which data should be retrieved.
+&lt;/span>&lt;span class="cm"> * @return A reference to the data of the (key,data) %pair.
+&lt;/span>&lt;span class="cm"> *
+&lt;/span>&lt;span class="cm"> * Allows for easy lookup with the subscript ( @c [] )operator. Returns
+&lt;/span>&lt;span class="cm"> * data associated with the key specified in subscript. If the key does
+&lt;/span>&lt;span class="cm"> * not exist, a pair with that key is created using default values, which
+&lt;/span>&lt;span class="cm"> * is then returned.
+&lt;/span>&lt;span class="cm"> *
+&lt;/span>&lt;span class="cm"> * Lookup requires constant time.
+&lt;/span>&lt;span class="cm"> */&lt;/span>
+&lt;span class="n">mapped_type&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>
+&lt;span class="k">operator&lt;/span>&lt;span class="p">[](&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="n">key_type&lt;/span>&lt;span class="o">&amp;amp;&lt;/span> &lt;span class="n">__k&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">{&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="n">_M_h&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">__k&lt;/span>&lt;span class="p">];&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;span class="n">mapped_type&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>
+&lt;span class="k">operator&lt;/span>&lt;span class="p">[](&lt;/span>&lt;span class="n">key_type&lt;/span>&lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">__k&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">{&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="n">_M_h&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">move&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">__k&lt;/span>&lt;span class="p">)];&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;span class="c1">//@}
+&lt;/span>&lt;span class="c1">&lt;/span>
+&lt;span class="c1">//@{
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="cm">/**
+&lt;/span>&lt;span class="cm"> * @brief Access to %unordered_map data.
+&lt;/span>&lt;span class="cm"> * @param __k The key for which data should be retrieved.
+&lt;/span>&lt;span class="cm"> * @return A reference to the data whose key is equal to @a __k, if
+&lt;/span>&lt;span class="cm"> * such a data is present in the %unordered_map.
+&lt;/span>&lt;span class="cm"> * @throw std::out_of_range If no such data is present.
+&lt;/span>&lt;span class="cm"> */&lt;/span>
+&lt;span class="n">mapped_type&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>
+&lt;span class="n">at&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="n">key_type&lt;/span>&lt;span class="o">&amp;amp;&lt;/span> &lt;span class="n">__k&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">{&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="n">_M_h&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">at&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">__k&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;span class="k">const&lt;/span> &lt;span class="n">mapped_type&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>
+&lt;span class="n">at&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="n">key_type&lt;/span>&lt;span class="o">&amp;amp;&lt;/span> &lt;span class="n">__k&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="k">const&lt;/span>
+&lt;span class="p">{&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="n">_M_h&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">at&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">__k&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>[]&lt;/code>没有带&lt;code>const&lt;/code>的重载，但&lt;code>at&lt;/code>有，可以用&lt;code>at&lt;/code>代替，对&lt;code>map同理&lt;/code>&lt;/p>
+&lt;h2 id="关于求值顺序">关于求值顺序&lt;/h2>
 &lt;p>本节搬运自&lt;a class="link" href="https://www.cnblogs.com/jiayouwyhit/p/3147310.html" target="_blank" rel="noopener"
 >【部分原创】标准C语言的优先级、结合性、求值顺序、未定义行为和非确定行为浅析&lt;/a>&lt;/p>
 &lt;p>在C语言中，仅有少数运算符在标准中有规定表达式求值的顺序&lt;/p>
@@ -311,7 +349,92 @@
 &lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">cout&lt;/span>&lt;span class="o">&amp;lt;&amp;lt;&lt;/span>&lt;span class="n">func&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">k&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">&amp;lt;&amp;lt;&lt;/span>&lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">endl&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;span class="p">}&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>萃取机制为模板使用中的类型声明问题提供了一种通用的实现方式，避免了使用&lt;code>value_types&lt;/code>的函数都需要进行偏特化设计的尴尬&lt;/p>
-&lt;h2 id="关于左值和右值todo">关于左值和右值(TODO)&lt;/h2>
+&lt;h2 id="右值右值引用">右值&amp;amp;右值引用&lt;/h2>
+&lt;p>右值可以分成两种：&lt;/p>
+&lt;ul>
+&lt;li>纯右值（Pure value，简称 pvalue）&lt;/li>
+&lt;li>将亡值（eXpiring value，简称 xvalue ）&lt;/li>
+&lt;/ul>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th style="text-align:left">引用类型&lt;/th>
+&lt;th style="text-align:center">非常量左值&lt;/th>
+&lt;th style="text-align:center">常量左值&lt;/th>
+&lt;th style="text-align:center">非常量右值&lt;/th>
+&lt;th style="text-align:center">常量右值&lt;/th>
+&lt;th style="text-align:left">使用场景&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td style="text-align:left">非常量左值引用&lt;/td>
+&lt;td style="text-align:center">Y&lt;/td>
+&lt;td style="text-align:center">N&lt;/td>
+&lt;td style="text-align:center">N&lt;/td>
+&lt;td style="text-align:center">N&lt;/td>
+&lt;td style="text-align:left">无&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">常量左值引用&lt;/td>
+&lt;td style="text-align:center">Y&lt;/td>
+&lt;td style="text-align:center">Y&lt;/td>
+&lt;td style="text-align:center">Y&lt;/td>
+&lt;td style="text-align:center">Y&lt;/td>
+&lt;td style="text-align:left">常用于类中构建拷贝构造函数&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">非常量右值引用&lt;/td>
+&lt;td style="text-align:center">N&lt;/td>
+&lt;td style="text-align:center">N&lt;/td>
+&lt;td style="text-align:center">Y&lt;/td>
+&lt;td style="text-align:center">N&lt;/td>
+&lt;td style="text-align:left">移动语义、完美转发&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">常量右值引用&lt;/td>
+&lt;td style="text-align:center">N&lt;/td>
+&lt;td style="text-align:center">N&lt;/td>
+&lt;td style="text-align:center">Y&lt;/td>
+&lt;td style="text-align:center">Y&lt;/td>
+&lt;td style="text-align:left">无实际用途&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h2 id="关于完美转发和引用折叠">关于完美转发和引用折叠&lt;/h2>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="k">template&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="k">typename&lt;/span> &lt;span class="n">T&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;span class="kt">void&lt;/span> &lt;span class="n">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">T&lt;/span> &lt;span class="o">&amp;amp;&lt;/span> &lt;span class="n">t&lt;/span>&lt;span class="p">){&lt;/span>
+&lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">cout&lt;/span> &lt;span class="o">&amp;lt;&amp;lt;&lt;/span> &lt;span class="s">&amp;#34;左值&amp;#34;&lt;/span> &lt;span class="o">&amp;lt;&amp;lt;&lt;/span> &lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">endl&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">template&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="k">typename&lt;/span> &lt;span class="n">T&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;span class="kt">void&lt;/span> &lt;span class="n">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">T&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">t&lt;/span>&lt;span class="p">){&lt;/span>
+&lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">cout&lt;/span> &lt;span class="o">&amp;lt;&amp;lt;&lt;/span> &lt;span class="s">&amp;#34;右值&amp;#34;&lt;/span> &lt;span class="o">&amp;lt;&amp;lt;&lt;/span> &lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">endl&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">template&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="k">typename&lt;/span> &lt;span class="n">T&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;span class="kt">void&lt;/span> &lt;span class="n">testForward&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">T&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">v&lt;/span>&lt;span class="p">){&lt;/span>
+&lt;span class="n">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">v&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="n">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">forward&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">T&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">v&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;span class="n">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">move&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">v&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">argc&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">char&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="n">argv&lt;/span>&lt;span class="p">[])&lt;/span>
+&lt;span class="p">{&lt;/span>
+&lt;span class="n">testForward&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">cout&lt;/span> &lt;span class="o">&amp;lt;&amp;lt;&lt;/span> &lt;span class="s">&amp;#34;======================&amp;#34;&lt;/span> &lt;span class="o">&amp;lt;&amp;lt;&lt;/span> &lt;span class="n">std&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="n">endl&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="n">testForward&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="c1">// 运行结果：
+&lt;/span>&lt;span class="c1">// 左值
+&lt;/span>&lt;span class="c1">// 右值
+&lt;/span>&lt;span class="c1">// 右值
+&lt;/span>&lt;span class="c1">// ======================
+&lt;/span>&lt;span class="c1">// 左值
+&lt;/span>&lt;span class="c1">// 左值
+&lt;/span>&lt;span class="c1">// 右值
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>右值引用是左值！！！&lt;/strong>
+C++不允许引用的引用，模板类会将其折叠，
+仅当两次引用均为右值引用时才会折叠为右值引用，否则折叠为左值引用&lt;/p>
 &lt;h2 id="参考">参考&lt;/h2>
 &lt;ol>
 &lt;li>&lt;a class="link" href="https://blog.csdn.net/jamesmf/article/details/4653926" target="_blank" rel="noopener"
@@ -322,6 +445,10 @@
 >C++模板之typename和class关键字的区别&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://zhuanlan.zhihu.com/p/85809752" target="_blank" rel="noopener"
 >C++ STL 源码剖析之 Traits 编程技法&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="http://c.biancheng.net/view/7829.html" target="_blank" rel="noopener"
+>C++11右值引用（一看即懂）&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://zhuanlan.zhihu.com/p/161039484" target="_blank" rel="noopener"
+>聊聊C++中的完美转发&lt;/a>&lt;/li>
 &lt;/ol></description></item><item><title>算法题常用小技巧</title><link>https://awpep.github.io/p/acm-tips/</link><pubDate>Wed, 28 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/acm-tips/</guid><description>&lt;h2 id="常用位运算公式">常用位运算公式&lt;/h2>
 &lt;p>lowbit：取最后一位1 &lt;code>-x&amp;amp;x&lt;/code>&lt;br>
 去除最后一位1 &lt;code>(x-1)&amp;amp;x&lt;/code>&lt;br>
