@@ -462,7 +462,58 @@
 &lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>右值引用是左值！！！&lt;/strong>
 C++不允许引用的引用，模板类会将其折叠，
 仅当两次引用均为右值引用时才会折叠为右值引用，否则折叠为左值引用&lt;/p>
-&lt;h2 id="参考">参考&lt;/h2>
+&lt;h2 id="关于sort的第三参数">关于&lt;code>sort&lt;/code>的第三参数&lt;/h2>
+&lt;h3 id="compare的实现要求">compare的实现要求&lt;/h3>
+&lt;ol>
+&lt;li>对于任意元素&lt;code>a&lt;/code>，需满足&lt;code>comp(a, a) == false&lt;/code>&lt;/li>
+&lt;li>对于任意两个元素&lt;code>a&lt;/code>和&lt;code>b&lt;/code>，若&lt;code>comp(a, b)==true&lt;/code>则要满足&lt;code>comp(b, a)==false&lt;/code>&lt;/li>
+&lt;li>对于任意三个元素&lt;code>a&lt;/code>、&lt;code>b&lt;/code>和&lt;code>c&lt;/code>，若&lt;code>comp(a, b)==true&lt;/code>且&lt;code>comp(b, c)==true&lt;/code>则需要满足&lt;code>comp(a, c)==true&lt;/code>&lt;/li>
+&lt;/ol>
+&lt;h3 id="sort中容易出问题的片段">&lt;code>sort&lt;/code>中容易出问题的片段&lt;/h3>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="c1">/// This is a helper function for the sort routine.
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="k">template&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="k">typename&lt;/span> &lt;span class="n">_RandomAccessIterator&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">typename&lt;/span> &lt;span class="n">_Compare&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;span class="kt">void&lt;/span>
+&lt;span class="n">__unguarded_linear_insert&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">_RandomAccessIterator&lt;/span> &lt;span class="n">__last&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="n">_Compare&lt;/span> &lt;span class="n">__comp&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">{&lt;/span>
+&lt;span class="k">typename&lt;/span> &lt;span class="n">iterator_traits&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">_RandomAccessIterator&lt;/span>&lt;span class="o">&amp;gt;::&lt;/span>&lt;span class="n">value_type&lt;/span>
+&lt;span class="n">__val&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">_GLIBCXX_MOVE&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">__last&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="n">_RandomAccessIterator&lt;/span> &lt;span class="n">__next&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">__last&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="o">--&lt;/span>&lt;span class="n">__next&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">while&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">__comp&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">__val&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">__next&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;span class="p">{&lt;/span>
+&lt;span class="o">*&lt;/span>&lt;span class="n">__last&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">_GLIBCXX_MOVE&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">__next&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="n">__last&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">__next&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="o">--&lt;/span>&lt;span class="n">__next&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="o">*&lt;/span>&lt;span class="n">__last&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">_GLIBCXX_MOVE&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">__val&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>很显然，在sort运行到以上函数的时候，如果剩余元素全部相同，那么循环就会一直持续下去直到越界&lt;/p>
+&lt;h3 id="构造一个导致sort崩溃的例程">构造一个导致&lt;code>sort&lt;/code>崩溃的例程&lt;/h3>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">int&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="n">vector&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">nums&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">17&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="k">auto&lt;/span> &lt;span class="n">cmp&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[](&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">a&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">b&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="k">return&lt;/span> &lt;span class="n">a&lt;/span> &lt;span class="o">&amp;gt;=&lt;/span> &lt;span class="n">b&lt;/span>&lt;span class="p">;};&lt;/span>
+&lt;span class="n">sort&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">nums&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">begin&lt;/span>&lt;span class="p">(),&lt;/span>&lt;span class="n">nums&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">end&lt;/span>&lt;span class="p">(),&lt;/span>&lt;span class="n">cmp&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>前16个元素会使用正常的插入排序，后面的元素才会使用无保护的插入排序&lt;/p>
+&lt;h2 id="变量的声明和定义">变量的声明和定义&lt;/h2>
+&lt;ul>
+&lt;li>声明使得名字为程序所知，一个文件如果想使用别处定义的名字则必须包含对那个名字的声明&lt;/li>
+&lt;li>定义负责创建与名字关联的实体，需要申请存储空间&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="k">extern&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">var&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 声明
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="k">extern&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">ble&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">10&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 定义
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="k">typedef&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">INT&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 声明
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="k">struct&lt;/span> &lt;span class="nc">Node&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 声明
+&lt;/span>&lt;span class="c1">&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="n">value&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 声明+定义
+&lt;/span>&lt;span class="c1">&lt;/span>
+&lt;span class="k">struct&lt;/span> &lt;span class="nc">Node&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="c1">// 声明+定义
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">left&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="n">right&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">};&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="参考">参考&lt;/h2>
 &lt;ol>
 &lt;li>&lt;a class="link" href="https://blog.csdn.net/jamesmf/article/details/4653926" target="_blank" rel="noopener"
 >const关键字放在“类型前”与“类型后”&lt;/a>&lt;/li>
@@ -478,6 +529,10 @@ C++不允许引用的引用，模板类会将其折叠，
 >C++11右值引用（一看即懂）&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://zhuanlan.zhihu.com/p/161039484" target="_blank" rel="noopener"
 >聊聊C++中的完美转发&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://blog.csdn.net/albertsh/article/details/119523587" target="_blank" rel="noopener"
+>C++中使用std::sort自定义排序规则时要注意的崩溃问题&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://blog.csdn.net/nyist_zxp/article/details/118782761" target="_blank" rel="noopener"
+>【C/C++面试必备】声明和定义的区别&lt;/a>&lt;/li>
 &lt;/ol></description></item><item><title>算法题常用小技巧</title><link>https://awpep.github.io/p/acm-tips/</link><pubDate>Wed, 28 Jul 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/acm-tips/</guid><description>&lt;h2 id="常用位运算公式">常用位运算公式&lt;/h2>
 &lt;p>lowbit：取最后一位1 &lt;code>-x&amp;amp;x&lt;/code>&lt;br>
 去除最后一位1 &lt;code>(x-1)&amp;amp;x&lt;/code>&lt;br>
