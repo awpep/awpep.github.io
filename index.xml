@@ -1,4 +1,124 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>不会C的菜菜</title><link>https://awpep.github.io/</link><description>Recent content on 不会C的菜菜</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 26 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://awpep.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Effective C++阅读笔记</title><link>https://awpep.github.io/p/effective-cpp-tips/</link><pubDate>Thu, 26 Aug 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/effective-cpp-tips/</guid><description>&lt;h2 id="视c为一个语言联邦">视C++为一个语言联邦&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>不会C的菜菜</title><link>https://awpep.github.io/</link><description>Recent content on 不会C的菜菜</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 21 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://awpep.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Java学习笔记</title><link>https://awpep.github.io/p/java-tips/</link><pubDate>Sat, 21 May 2022 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/java-tips/</guid><description>&lt;h2 id="maven">maven&lt;/h2>
+&lt;h3 id="maven的生命周期">maven的生命周期&lt;/h3>
+&lt;p>maven有三套独立的生命周期：clean、default、site&lt;br>
+每个生命周期又包含了多个阶段。这些阶段在执行的时候是有固定顺序的。后面的阶段一定要等前面的阶段执行完成后才能被执行。&lt;/p>
+&lt;h4 id="clean">clean&lt;/h4>
+&lt;p>包含三个阶段：&lt;/p>
+&lt;ul>
+&lt;li>pre-clean：执行清理前需要完成的工作。&lt;/li>
+&lt;li>clean：清理上一次构建过程中生成的文件，比如编译后的 class 文件等。&lt;/li>
+&lt;li>post-clean：执行清理后需要完成的工作。&lt;/li>
+&lt;/ul>
+&lt;h4 id="default">default&lt;/h4>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th style="text-align:left">名称&lt;/th>
+&lt;th style="text-align:left">说明&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td style="text-align:left">validate&lt;/td>
+&lt;td style="text-align:left">验证项目结构是否正常，必要的配置文件是否存在&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">initialize&lt;/td>
+&lt;td style="text-align:left">做构建前的初始化操作，比如初始化参数、创建必要的目录等&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">generate-sources&lt;/td>
+&lt;td style="text-align:left">产生在编译过程中需要的源代码&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">process-sources&lt;/td>
+&lt;td style="text-align:left">处理源代码，比如过滤值&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;strong>generate-resources&lt;/strong>&lt;/td>
+&lt;td style="text-align:left">产生主代码中的资源在 classpath 中的包&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;strong>process-resources&lt;/strong>&lt;/td>
+&lt;td style="text-align:left">将资源文件复制到 classpath 的对应包中&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;strong>compile&lt;/strong>&lt;/td>
+&lt;td style="text-align:left">编译项目中的源代码&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">process-classes&lt;/td>
+&lt;td style="text-align:left">产生编译过程中生成的文件&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">generate-test-sources&lt;/td>
+&lt;td style="text-align:left">产生编译过程中测试相关的代码&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">process-test-sources&lt;/td>
+&lt;td style="text-align:left">处理测试代码&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;strong>generate-test-resources&lt;/strong>&lt;/td>
+&lt;td style="text-align:left">产生测试中资源在 classpath 中的包&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;strong>process-test-resources&lt;/strong>&lt;/td>
+&lt;td style="text-align:left">将测试资源复制到 classpath 中&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;strong>test-compile&lt;/strong>&lt;/td>
+&lt;td style="text-align:left">编译测试代码&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">process-test-classes&lt;/td>
+&lt;td style="text-align:left">产生编译测试代码过程的文件&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;strong>test&lt;/strong>&lt;/td>
+&lt;td style="text-align:left">运行测试案例&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">prepare-package&lt;/td>
+&lt;td style="text-align:left">处理打包前需要初始化的准备工作&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">package&lt;/td>
+&lt;td style="text-align:left">将编译后的 class 和资源打包成压缩文件，比如 rar&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">pre-integration-test&lt;/td>
+&lt;td style="text-align:left">做好集成测试前的准备工作，比如集成环境的参数设置&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">integration-test&lt;/td>
+&lt;td style="text-align:left">集成测试&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">post-integration-test&lt;/td>
+&lt;td style="text-align:left">完成集成测试后的收尾工作，比如清理集成环境的值&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">verify&lt;/td>
+&lt;td style="text-align:left">检测测试后的包是否完好&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;strong>install&lt;/strong>&lt;/td>
+&lt;td style="text-align:left">将打包的组件以构件的形式，安装到本地依赖仓库中，以便共享给本地的其他项目&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;strong>deploy&lt;/strong>&lt;/td>
+&lt;td style="text-align:left">运行集成和发布环境，将测试后的最终包以构件的方式发布到远程仓库中，方便所有程序员共享&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h4 id="site">site&lt;/h4>
+&lt;ul>
+&lt;li>pre-site：执行生成站点前的准备工作。&lt;/li>
+&lt;li>site：生成站点文档。&lt;/li>
+&lt;li>post-site：执行生成站点后需要收尾的工作。&lt;/li>
+&lt;li>site-deploy：将生成的站点发布到服务器上。&lt;/li>
+&lt;/ul></description></item><item><title>Effective C++阅读笔记</title><link>https://awpep.github.io/p/effective-cpp-tips/</link><pubDate>Thu, 26 Aug 2021 00:00:00 +0000</pubDate><guid>https://awpep.github.io/p/effective-cpp-tips/</guid><description>&lt;h2 id="视c为一个语言联邦">视C++为一个语言联邦&lt;/h2>
 &lt;p>将C++看作四个次级结构组成的语法体系，每个体系都会有独自的守则&lt;/p>
 &lt;ol>
 &lt;li>C&lt;/li>
@@ -513,7 +633,20 @@ C++不允许引用的引用，模板类会将其折叠，
 &lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">left&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;span class="kt">int&lt;/span> &lt;span class="n">right&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;span class="p">};&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="参考">参考&lt;/h2>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="关于四大转型">关于四大转型&lt;/h2>
+&lt;h3 id="static_cast">static_cast&lt;/h3>
+&lt;ul>
+&lt;li>编译器隐式执行的任何类型转换都可以由&lt;code>static_cast&lt;/code>来完成，比如&lt;code>int&lt;/code>与&lt;code>float&lt;/code>、&lt;code>double&lt;/code>与&lt;code>char&lt;/code>、&lt;code>enum&lt;/code>与&lt;code>int&lt;/code>之间的转换等&lt;/li>
+&lt;li>&lt;code>static_cast&lt;/code>还能进行向下转型
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="k">class&lt;/span> &lt;span class="nc">Base&lt;/span>&lt;span class="p">{&lt;/span> &lt;span class="p">};&lt;/span>
+&lt;span class="k">class&lt;/span> &lt;span class="nc">Derived&lt;/span> &lt;span class="o">:&lt;/span> &lt;span class="k">public&lt;/span> &lt;span class="n">Base&lt;/span>&lt;span class="p">{&lt;/span> &lt;span class="p">};&lt;/span>
+&lt;span class="n">Base&lt;/span>&lt;span class="o">*&lt;/span> &lt;span class="n">B&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="n">Derived&lt;/span>&lt;span class="o">*&lt;/span> &lt;span class="n">D&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="n">D&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">static_cast&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Derived&lt;/span>&lt;span class="o">*&amp;gt;&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">B&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 正确，通过使用static_cast向下转型
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="n">D&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">B&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 错误，不能隐式地向下转型
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h2 id="参考">参考&lt;/h2>
 &lt;ol>
 &lt;li>&lt;a class="link" href="https://blog.csdn.net/jamesmf/article/details/4653926" target="_blank" rel="noopener"
 >const关键字放在“类型前”与“类型后”&lt;/a>&lt;/li>
