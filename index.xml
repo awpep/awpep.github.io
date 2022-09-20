@@ -331,7 +331,35 @@
 &lt;span class="k">if&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">y&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="n">cout&lt;/span> &lt;span class="o">&amp;lt;&amp;lt;&lt;/span> &lt;span class="s">&amp;#34;1st&amp;#34;&lt;/span> &lt;span class="o">&amp;lt;&amp;lt;&lt;/span> &lt;span class="n">endl&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;span class="k">else&lt;/span> &lt;span class="n">cout&lt;/span> &lt;span class="o">&amp;lt;&amp;lt;&lt;/span> &lt;span class="s">&amp;#34;2nd&amp;#34;&lt;/span> &lt;span class="o">&amp;lt;&amp;lt;&lt;/span> &lt;span class="n">endl&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;span class="c1">//结果：2nd
-&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="关于template">关于template&lt;/h2>
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="关于auto">关于&lt;code>auto&lt;/code>&lt;/h2>
+&lt;p>&lt;code>auto&lt;/code>仅仅是一个占位符，在编译期间会被真正的类型所替代&lt;/p>
+&lt;h3 id="几个关键点">几个关键点&lt;/h3>
+&lt;ol>
+&lt;li>
+&lt;p>可以连续定义多个变量，但不能二义&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">int&lt;/span> &lt;span class="n">n&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">20&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">auto&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">p&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">n&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">m&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">99&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 可以编译，m推导为int
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="k">auto&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">a&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">n&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">b&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mf">9.9&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 编译错误，auto不能同时是int和double
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>如果和具体类型混合使用，&lt;code>auto&lt;/code>表示的“半个”类型&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">int&lt;/span> &lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">auto&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">p1&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// p1 为 int*，auto 推导为 int
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="k">auto&lt;/span> &lt;span class="n">p2&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// p2 为 int*，auto 推导为 int*
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="k">auto&lt;/span> &lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">r1&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// r1 为 int&amp;amp;，auto 推导为 int
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="k">auto&lt;/span> &lt;span class="n">r2&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">r1&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// r2 为 int，auto 推导为 int，auto 会抛弃引用
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>&lt;code>auto&lt;/code>和&lt;code>const&lt;/code>&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="kt">int&lt;/span> &lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">const&lt;/span> &lt;span class="k">auto&lt;/span> &lt;span class="n">n&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// n 为 const int, auto 被推导为 int
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="k">auto&lt;/span> &lt;span class="n">f&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">n&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// f 为 int, auto 被推导为 int（const 属性被抛弃）
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="k">auto&lt;/span> &lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">r1&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// r1 为 const int&amp;amp; 类型，auto 被推导为 int
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="k">auto&lt;/span> &lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">r2&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">r1&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// r2 为 const int&amp;amp; 类型，auto 被推导为 const int 类型
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="k">auto&lt;/span> &lt;span class="n">r3&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">r1&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// r3 为 int 类型，auto 被推导为 int（const 属性和引用均被抛弃）
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;h2 id="关于template">关于template&lt;/h2>
 &lt;h3 id="萃取机制">萃取机制&lt;/h3>
 &lt;h4 id="内嵌型别">内嵌型别&lt;/h4>
 &lt;p>个人理解，所谓&lt;em>内嵌型别&lt;/em>就是在类的内部使用&lt;code>typedef&lt;/code>给类型定义别名，常常与模板相结合&lt;br>
